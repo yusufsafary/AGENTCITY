@@ -9,8 +9,8 @@ export default function LoadingOverlay({ state, nightMode }: LoadingOverlayProps
   if (state.step === 'idle' || state.step === 'done') return null;
 
   const isError = state.step === 'error';
-  const backdrop = nightMode ? 'bg-[#0F0315]/90' : 'bg-[#1C0E06]/75';
-  const cardBg = nightMode ? 'bg-[#13032a] border-white/10' : 'bg-[#1C0E06]/95 border-[#4ABFB0]/20';
+  const backdrop = nightMode ? 'bg-[#0F0315]/90' : 'bg-[#04080F]/80';
+  const cardBg = nightMode ? 'bg-[#13032a] border-white/10' : 'bg-[#080C16]/95 border-white/10';
 
   return (
     <div className={`fixed inset-0 z-50 flex items-center justify-center ${backdrop} backdrop-blur-sm`}>
@@ -30,8 +30,8 @@ export default function LoadingOverlay({ state, nightMode }: LoadingOverlayProps
             <p className="text-sm mt-1 text-white/55">{state.message}</p>
             <div className="mt-4 h-1.5 rounded-full bg-white/10 overflow-hidden">
               <div
-                className="h-full bg-[#4ABFB0] rounded-full transition-all duration-700"
-                style={{ width: stepToPercent(state.step) + '%' }}
+                className="h-full rounded-full transition-all duration-700"
+                style={{ width: stepToPercent(state.step) + '%', background: 'linear-gradient(90deg, #CAFF00, #FF0090)' }}
               />
             </div>
           </>
@@ -62,11 +62,17 @@ function LoadingSpinner() {
       <circle
         cx="20" cy="20" r="16"
         fill="none"
-        stroke="#4ABFB0"
+        stroke="url(#spinner-grad)"
         strokeWidth="3"
         strokeDasharray="60 40"
         strokeLinecap="round"
       />
+      <defs>
+        <linearGradient id="spinner-grad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="#CAFF00" />
+          <stop offset="100%" stopColor="#FF0090" />
+        </linearGradient>
+      </defs>
     </svg>
   );
 }
