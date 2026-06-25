@@ -1,0 +1,10 @@
+{
+  "buildCommand": "cd artifacts/github-city && npm install && npm run build",
+  "outputDirectory": "artifacts/github-city/dist/public",
+  "installCommand": "echo 'skip root install'",
+  "framework": null,
+  "rewrites": [
+    { "source": "/u/:username", "destination": "/api/share?u=:username" },
+    { "source": "/((?!api/).*)", "destination": "/index.html" }
+  ]
+}
