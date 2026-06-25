@@ -782,6 +782,51 @@ function LandingHero({ onShowLeaderboard }: { onShowLeaderboard: () => void }) {
             </button>
           </div>
 
+          {/* Builder Twitter card */}
+          <a
+            href="https://x.com/jackie_doll96"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="pointer-events-auto flex items-center gap-2.5 mt-3 px-3.5 py-2.5 rounded-2xl no-underline group"
+            style={{
+              background: 'rgba(4,8,15,0.72)',
+              border: '1px solid rgba(255,255,255,0.10)',
+              backdropFilter: 'blur(12px)',
+              WebkitBackdropFilter: 'blur(12px)',
+              boxShadow: '0 2px 16px rgba(0,0,0,0.35)',
+              maxWidth: 220,
+              animation: 'gc-fade-up 0.6s ease-out 0.78s both',
+              transition: 'border-color 0.18s ease, box-shadow 0.18s ease',
+            }}
+            onMouseEnter={e => {
+              (e.currentTarget as HTMLAnchorElement).style.borderColor = 'rgba(255,255,255,0.22)';
+              (e.currentTarget as HTMLAnchorElement).style.boxShadow = '0 4px 24px rgba(0,0,0,0.5)';
+            }}
+            onMouseLeave={e => {
+              (e.currentTarget as HTMLAnchorElement).style.borderColor = 'rgba(255,255,255,0.10)';
+              (e.currentTarget as HTMLAnchorElement).style.boxShadow = '0 2px 16px rgba(0,0,0,0.35)';
+            }}
+          >
+            {/* Avatar */}
+            <div
+              className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold"
+              style={{ background: 'linear-gradient(135deg, #4ABFB0, #2CA89A)' }}
+            >
+              J
+            </div>
+            {/* Text */}
+            <div className="min-w-0 flex-1">
+              <p className="text-white/40 text-[10px] leading-none mb-0.5">Built by</p>
+              <p className="text-white/90 text-xs font-semibold leading-tight truncate">@jackie_doll96</p>
+            </div>
+            {/* X logo */}
+            <div className="shrink-0 text-white/35 group-hover:text-white/70 transition-colors">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.254 5.622 5.91-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+              </svg>
+            </div>
+          </a>
+
           {/* Powered by GitHub + legal footer */}
           <div
             className="pointer-events-auto flex flex-col items-center gap-1.5 mt-4"
