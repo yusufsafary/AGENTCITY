@@ -23,11 +23,12 @@ export default function DowntownSkyline({ bars, nightMode, animProgress }: Downt
         const animHeight = normalizedHeight * Math.min(animProgress * 1.5, 1);
         const isEmpty = bar.commits === 0;
 
+        const ratio = isEmpty ? 0 : bar.commits / maxCommits;
+        const limeCol = new THREE.Color('#CAFF00');
+        const pinkCol = new THREE.Color('#FF0090');
         const color = isEmpty
-          ? (nightMode ? '#1a2a1a' : '#4a7c59')
-          : (nightMode
-            ? new THREE.Color(NIGHT_PALETTE.turquoise).lerp(new THREE.Color(NIGHT_PALETTE.neonPink), bar.commits / maxCommits).getStyle()
-            : `hsl(${120 - (bar.commits / maxCommits) * 100}, 60%, 40%)`);
+          ? (nightMode ? '#0a0f1a' : '#0d1428')
+          : limeCol.clone().lerp(pinkCol, ratio).getStyle();
 
         return (
           <mesh
@@ -38,10 +39,10 @@ export default function DowntownSkyline({ bars, nightMode, animProgress }: Downt
             <boxGeometry args={[1.1, Math.max(animHeight, 0.05), 1.1]} />
             <meshStandardMaterial
               color={color}
-              emissive={nightMode && !isEmpty ? new THREE.Color(NIGHT_PALETTE.turquoise) : new THREE.Color(0)}
-              emissiveIntensity={nightMode && !isEmpty ? 0.5 : 0}
-              roughness={0.6}
-              metalness={nightMode ? 0.4 : 0.1}
+              emissive={!isEmpty ? (ratio > 0.5 ? pinkCol : limeCol) : new THREE.Color(0)}
+              emissiveIntensity={!isEmpty ? 0.35 + ratio * 0.9 : 0}
+              roughness={0.45}
+              metalness={0.5}
             />
           </mesh>
         );
