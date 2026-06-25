@@ -8,66 +8,69 @@ interface GroundProps {
   onClick?: () => void;
 }
 
-function createGroundTexture(night: boolean): THREE.CanvasTexture {
+function createGroundTexture(_night: boolean): THREE.CanvasTexture {
+  const SZ = 1024;
   const canvas = document.createElement('canvas');
-  canvas.width = 512;
-  canvas.height = 512;
+  canvas.width = SZ; canvas.height = SZ;
   const ctx = canvas.getContext('2d')!;
 
-  if (night) {
-    ctx.fillStyle = '#0d0a14';
-    ctx.fillRect(0, 0, 512, 512);
-    ctx.strokeStyle = NIGHT_PALETTE.turquoise;
-    ctx.lineWidth = 1.5;
-    ctx.globalAlpha = 0.5;
-    const step = 64;
-    for (let x = 0; x <= 512; x += step) {
-      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, 512); ctx.stroke();
-    }
-    for (let y = 0; y <= 512; y += step) {
-      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(512, y); ctx.stroke();
-    }
-    ctx.globalAlpha = 1;
-  } else {
-    // Martian regolith — sandy terracotta ground
-    ctx.fillStyle = MARS_PALETTE.groundDay;
-    ctx.fillRect(0, 0, 512, 512);
+  ctx.fillStyle = '#070A14';
+  ctx.fillRect(0, 0, SZ, SZ);
 
-    // Subtle dust texture noise
-    for (let i = 0; i < 800; i++) {
-      const x = Math.random() * 512;
-      const y = Math.random() * 512;
-      const r = Math.random() * 3 + 1;
-      ctx.globalAlpha = Math.random() * 0.12;
-      ctx.fillStyle = Math.random() > 0.5 ? MARS_PALETTE.sandLight : MARS_PALETTE.fogDay;
-      ctx.beginPath();
-      ctx.arc(x, y, r, 0, Math.PI * 2);
-      ctx.fill();
-    }
-    ctx.globalAlpha = 1;
-
-    // Road grid (sandy paths)
-    ctx.strokeStyle = MARS_PALETTE.groundRoad;
-    ctx.lineWidth = 14;
-    ctx.globalAlpha = 0.6;
-    for (let i = 0; i < 5; i++) {
-      ctx.beginPath(); ctx.moveTo(i * 128, 0); ctx.lineTo(i * 128, 512); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(0, i * 128); ctx.lineTo(512, i * 128); ctx.stroke();
-    }
-    ctx.globalAlpha = 1;
-
-    // Road center dashes
-    ctx.strokeStyle = '#C4A070';
-    ctx.lineWidth = 2;
-    ctx.setLineDash([16, 16]);
-    ctx.beginPath(); ctx.moveTo(256, 0); ctx.lineTo(256, 512); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(0, 256); ctx.lineTo(512, 256); ctx.stroke();
-    ctx.setLineDash([]);
+  ctx.strokeStyle = '#CAFF00';
+  ctx.lineWidth = 0.7;
+  ctx.globalAlpha = 0.07;
+  const minor = 64;
+  for (let x = 0; x <= SZ; x += minor) {
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, SZ); ctx.stroke();
   }
+  for (let y = 0; y <= SZ; y += minor) {
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(SZ, y); ctx.stroke();
+  }
+
+  ctx.lineWidth = 2;
+  ctx.globalAlpha = 0.18;
+  const major = 256;
+  for (let x = 0; x <= SZ; x += major) {
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, SZ); ctx.stroke();
+  }
+  for (let y = 0; y <= SZ; y += major) {
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(SZ, y); ctx.stroke();
+  }
+
+  ctx.strokeStyle = '#FF0090';
+  ctx.lineWidth = 1.8;
+  ctx.globalAlpha = 0.22;
+  ctx.beginPath(); ctx.moveTo(SZ / 2, 0); ctx.lineTo(SZ / 2, SZ); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(0, SZ / 2); ctx.lineTo(SZ, SZ / 2); ctx.stroke();
+
+  ctx.setLineDash([22, 18]);
+  ctx.lineWidth = 1.2;
+  ctx.globalAlpha = 0.28;
+  ctx.beginPath(); ctx.moveTo(SZ / 2, 0); ctx.lineTo(SZ / 2, SZ); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(0, SZ / 2); ctx.lineTo(SZ, SZ / 2); ctx.stroke();
+  ctx.setLineDash([]);
+
+  ctx.fillStyle = '#FF0090';
+  ctx.globalAlpha = 0.10;
+  for (let s = 0; s < 10; s++) {
+    ctx.fillRect(SZ / 2 - 4 - s * 9, SZ / 4 - 2, 5, 36);
+    ctx.fillRect(SZ / 2 - 4 - s * 9, SZ * 3 / 4 - 2, 5, 36);
+    ctx.fillRect(SZ / 4 - 2, SZ / 2 - 4 - s * 9, 36, 5);
+    ctx.fillRect(SZ * 3 / 4 - 2, SZ / 2 - 4 - s * 9, 36, 5);
+  }
+
+  const grad = ctx.createRadialGradient(SZ / 2, SZ / 2, 0, SZ / 2, SZ / 2, SZ * 0.38);
+  grad.addColorStop(0,   'rgba(202,255,0,0.12)');
+  grad.addColorStop(0.45,'rgba(202,255,0,0.04)');
+  grad.addColorStop(1,   'rgba(0,0,0,0)');
+  ctx.globalAlpha = 1;
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, SZ, SZ);
 
   const tex = new THREE.CanvasTexture(canvas);
   tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
-  tex.repeat.set(8, 8);
+  tex.repeat.set(6, 6);
   return tex;
 }
 
@@ -79,11 +82,11 @@ export default function Ground({ nightMode, size = 200, onClick }: GroundProps) 
       <planeGeometry args={[size, size, 1, 1]} />
       <meshStandardMaterial
         map={texture}
-        color={nightMode ? '#0a0812' : MARS_PALETTE.groundDay}
-        roughness={0.95}
-        metalness={nightMode ? 0.1 : 0}
-        emissive={nightMode ? new THREE.Color(NIGHT_PALETTE.turquoise) : new THREE.Color(0)}
-        emissiveIntensity={nightMode ? 0.04 : 0}
+        color="#060A14"
+        roughness={0.88}
+        metalness={0.18}
+        emissive={new THREE.Color('#CAFF00')}
+        emissiveIntensity={nightMode ? 0.07 : 0.035}
       />
     </mesh>
   );
