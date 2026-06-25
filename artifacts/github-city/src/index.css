@@ -1,0 +1,84 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --font-sans: var(--app-font-sans);
+  --radius-lg: var(--radius);
+}
+
+:root {
+  --background: 220 60% 5%;
+  --foreground: 200 80% 90%;
+  --border: 220 40% 18%;
+  --input: 220 40% 18%;
+  --ring: 195 100% 50%;
+  --primary: 195 100% 50%;
+  --primary-foreground: 0 0% 5%;
+  --muted: 220 30% 12%;
+  --muted-foreground: 220 20% 55%;
+  --app-font-sans: 'Space Grotesk', system-ui, sans-serif;
+  --radius: 0.75rem;
+}
+
+@layer base {
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body, #root { width: 100%; height: 100%; overflow: hidden; }
+  body {
+    font-family: var(--app-font-sans);
+    -webkit-font-smoothing: antialiased;
+    background: #060D1F;
+  }
+}
+
+@keyframes gc-float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes gc-fade-up {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes gc-grid-drift {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(40px); }
+}
+
+@keyframes gc-pulse-glow {
+  0%, 100% { opacity: 0.15; }
+  50% { opacity: 0.3; }
+}
+
+@keyframes gc-window-blink {
+  0%, 92%, 100% { opacity: 1; }
+  94%, 98% { opacity: 0.2; }
+}
+
+@keyframes gc-neon-pulse {
+  0%, 100% { text-shadow: 0 0 8px #00D4FF, 0 0 20px #00D4FF44; }
+  50% { text-shadow: 0 0 16px #00D4FF, 0 0 40px #00D4FF88, 0 0 60px #00D4FF33; }
+}
+
+@keyframes gc-scan-line {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(400%); }
+}
+
+.gc-float { animation: gc-float 4s ease-in-out infinite; }
+.gc-fade-up-1 { animation: gc-fade-up 0.6s ease-out 0.1s both; }
+.gc-fade-up-2 { animation: gc-fade-up 0.6s ease-out 0.25s both; }
+.gc-fade-up-3 { animation: gc-fade-up 0.6s ease-out 0.4s both; }
+.gc-fade-up-4 { animation: gc-fade-up 0.6s ease-out 0.55s both; }
+.gc-neon { animation: gc-neon-pulse 2.5s ease-in-out infinite; }
