@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 import * as THREE from 'three';
-import { NIGHT_PALETTE, MARS_PALETTE } from '../../utils/colors';
 
 interface GroundProps {
   nightMode: boolean;
