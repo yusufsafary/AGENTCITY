@@ -208,7 +208,7 @@ function LandingHero({ onShowLeaderboard }: { onShowLeaderboard: () => void }) {
             <AgentCityLogo size={46} />
             <h1
               className="text-[1.55rem] font-bold leading-tight drop-shadow-lg text-center"
-              style={{ letterSpacing: '-0.025em', textShadow: '0 0 20px #00D4FF88, 0 2px 12px rgba(0,0,0,0.8)', color: '#00D4FF' }}
+              style={{ letterSpacing: '-0.025em', textShadow: '0 0 20px #CAFF0066, 0 2px 12px rgba(0,0,0,0.8)', color: '#CAFF00' }}
             >
               Agent City
             </h1>
@@ -222,11 +222,11 @@ function LandingHero({ onShowLeaderboard }: { onShowLeaderboard: () => void }) {
           <div className="flex flex-col items-start gap-2 pointer-events-auto">
             <button
               onClick={onShowLeaderboard}
-              className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-white/90 hover:text-white transition-all duration-200 backdrop-blur-sm"
-              style={{ border: '1px solid rgba(0,212,255,0.3)', background: 'rgba(0,20,40,0.5)', boxShadow: '0 0 12px rgba(0,212,255,0.15)' }}
+              className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200"
+              style={{ background: '#CAFF00', color: '#000', boxShadow: '0 0 16px rgba(202,255,0,0.35)' }}
             >
               <span className="text-base leading-none">🏆</span>
-              <span className="font-medium">Top Cities</span>
+              <span>Top Cities</span>
             </button>
             <div className="flex items-center gap-2">
               <button
@@ -266,11 +266,11 @@ function LandingHero({ onShowLeaderboard }: { onShowLeaderboard: () => void }) {
           <div className="gc-fade-up-2 text-center">
             <h1
               className="text-[2.2rem] font-bold leading-tight drop-shadow-lg"
-              style={{ letterSpacing: '-0.03em', color: '#00D4FF', textShadow: '0 0 30px #00D4FF66, 0 2px 16px rgba(0,0,0,0.6)' }}
+              style={{ letterSpacing: '-0.03em', color: '#CAFF00', textShadow: '0 0 30px #CAFF0055, 0 2px 16px rgba(0,0,0,0.7)' }}
             >
               Agent City
             </h1>
-            <div className="mx-auto mt-2 h-[2px] w-12 rounded-full" style={{ background: 'linear-gradient(90deg, #A855F7, #00D4FF, #00FF88)', opacity: 0.9 }} />
+            <div className="mx-auto mt-2 h-[2px] w-12 rounded-full" style={{ background: 'linear-gradient(90deg, #CAFF00, #FF0090)', opacity: 0.9 }} />
           </div>
 
           <p
@@ -290,9 +290,9 @@ function LandingHero({ onShowLeaderboard }: { onShowLeaderboard: () => void }) {
                 key={i}
                 className="text-[10px] font-semibold px-2 py-1 rounded-full"
                 style={{
-                  background: 'rgba(0,212,255,0.10)',
-                  border: '1px solid rgba(0,212,255,0.25)',
-                  color: '#00D4FF',
+                  background: i === 1 ? 'rgba(255,0,144,0.12)' : 'rgba(202,255,0,0.10)',
+                  border: `1px solid ${i === 1 ? 'rgba(255,0,144,0.30)' : 'rgba(202,255,0,0.28)'}`,
+                  color: i === 1 ? '#FF0090' : '#CAFF00',
                   letterSpacing: '0.04em',
                 }}
               >
@@ -303,16 +303,16 @@ function LandingHero({ onShowLeaderboard }: { onShowLeaderboard: () => void }) {
 
           <button
             onClick={onShowLeaderboard}
-            className="pointer-events-auto mt-6 flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium text-white/90 hover:text-white transition-all duration-200 backdrop-blur-sm"
+            className="pointer-events-auto mt-6 flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200"
             style={{
-              border: '1px solid rgba(0,212,255,0.35)',
-              background: 'rgba(0,20,40,0.55)',
-              boxShadow: '0 0 18px rgba(0,212,255,0.18)',
+              background: '#CAFF00',
+              color: '#000',
+              boxShadow: '0 0 24px rgba(202,255,0,0.40)',
               animation: 'gc-fade-up 0.6s ease-out 0.55s both',
             }}
           >
             <span className="text-base leading-none">🏆</span>
-            <span className="font-medium">View Top Cities</span>
+            <span>View Top Cities</span>
           </button>
 
           <div
@@ -322,7 +322,7 @@ function LandingHero({ onShowLeaderboard }: { onShowLeaderboard: () => void }) {
             <button
               onClick={() => setShowHowTo(true)}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-white/50 hover:text-white/85 transition-colors"
-              style={{ background: 'rgba(0,20,40,0.35)', border: '1px solid rgba(0,212,255,0.12)' }}
+              style={{ background: 'rgba(202,255,0,0.08)', border: '1px solid rgba(202,255,0,0.18)' }}
             >
               <span className="text-[11px] leading-none">❓</span>
               How to use
@@ -331,7 +331,7 @@ function LandingHero({ onShowLeaderboard }: { onShowLeaderboard: () => void }) {
             <button
               onClick={() => setShowAbout(true)}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-white/50 hover:text-white/85 transition-colors"
-              style={{ background: 'rgba(0,20,40,0.35)', border: '1px solid rgba(0,212,255,0.12)' }}
+              style={{ background: 'rgba(255,0,144,0.08)', border: '1px solid rgba(255,0,144,0.18)' }}
             >
               <span className="text-[11px] leading-none">ℹ️</span>
               About
@@ -370,65 +370,35 @@ export function AgentCityLogo({ size = 48, className = '' }: { size?: number; cl
   return (
     <svg width={size} height={size} viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
       <defs>
-        <radialGradient id="ac-bg" cx="50%" cy="40%" r="60%">
-          <stop offset="0%" stopColor="#0A2040" />
-          <stop offset="100%" stopColor="#030810" />
-        </radialGradient>
-        <radialGradient id="ac-glow" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#00D4FF" stopOpacity="0.4" />
-          <stop offset="100%" stopColor="#00D4FF" stopOpacity="0" />
-        </radialGradient>
-        <filter id="ac-blur">
-          <feGaussianBlur stdDeviation="1.5" />
-        </filter>
+        <linearGradient id="ac-grad" x1="0" y1="48" x2="48" y2="0" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#CAFF00" />
+          <stop offset="100%" stopColor="#FF0090" />
+        </linearGradient>
+        <linearGradient id="ac-grad2" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#FF0090" />
+          <stop offset="100%" stopColor="#CAFF00" />
+        </linearGradient>
       </defs>
-      {/* Background */}
-      <circle cx="24" cy="24" r="24" fill="url(#ac-bg)" />
-      <circle cx="24" cy="24" r="24" fill="url(#ac-glow)" />
-      {/* Grid lines */}
-      <line x1="6" y1="36" x2="42" y2="36" stroke="#00D4FF" strokeOpacity="0.18" strokeWidth="0.7" />
-      <line x1="24" y1="8" x2="24" y2="36" stroke="#00D4FF" strokeOpacity="0.10" strokeWidth="0.5" />
-      {/* Buildings */}
-      <rect x="6" y="28" width="6" height="8" fill="#00D4FF" opacity="0.55" rx="0.5" />
-      <rect x="7" y="29.5" width="1.6" height="1.4" fill="#00FF88" opacity="0.9" />
-      <rect x="7" y="32" width="1.6" height="1.4" fill="#00D4FF" opacity="0.6" />
-      <rect x="14" y="21" width="7" height="15" fill="#00D4FF" opacity="0.75" rx="0.5" />
-      <rect x="15.2" y="22.5" width="1.8" height="1.5" fill="#A855F7" opacity="0.9" />
-      <rect x="18" y="22.5" width="1.8" height="1.5" fill="#00D4FF" opacity="0.6" />
-      <rect x="15.2" y="25.5" width="1.8" height="1.5" fill="#00D4FF" opacity="0.8" />
-      <rect x="18" y="25.5" width="1.8" height="1.5" fill="#A855F7" opacity="0.5" />
-      <rect x="15.2" y="28.5" width="1.8" height="1.5" fill="#00FF88" opacity="0.7" />
-      {/* Tallest building */}
-      <rect x="22" y="12" width="8" height="24" fill="#00D4FF" opacity="0.90" rx="0.5" />
+      {/* Bold skyline silhouette — single graphic path */}
+      <path
+        d="M2,42 L2,32 L7,32 L7,26 L11,26 L11,32 L16,32 L16,14 L19,14 L19,9 L24,9 L24,14 L29,14 L29,22 L33,22 L33,26 L37,26 L37,30 L41,30 L41,22 L46,22 L46,42 Z"
+        fill="url(#ac-grad)"
+      />
       {/* Antenna */}
-      <rect x="25.5" y="9.5" width="1.5" height="3" fill="#00D4FF" opacity="0.7" rx="0.5" />
-      <circle cx="26.25" cy="9" r="1.2" fill="#00FF88" opacity="1.0" />
-      {/* Neural rings on tall building */}
-      <rect x="23.2" y="14" width="2" height="1.8" fill="#A855F7" opacity="0.9" />
-      <rect x="26.2" y="14" width="2" height="1.8" fill="#00D4FF" opacity="0.6" />
-      <rect x="23.2" y="17.5" width="2" height="1.8" fill="#00D4FF" opacity="0.7" />
-      <rect x="26.2" y="17.5" width="2" height="1.8" fill="#00FF88" opacity="0.9" />
-      <rect x="23.2" y="21" width="2" height="1.8" fill="#A855F7" opacity="0.5" />
-      <rect x="26.2" y="21" width="2" height="1.8" fill="#00D4FF" opacity="0.8" />
-      <rect x="23.2" y="24.5" width="2" height="1.8" fill="#00FF88" opacity="0.6" />
-      <rect x="26.2" y="24.5" width="2" height="1.8" fill="#A855F7" opacity="0.7" />
-      {/* Right building */}
-      <rect x="31" y="18" width="7" height="18" fill="#00D4FF" opacity="0.70" rx="0.5" />
-      <rect x="32.2" y="19.5" width="1.8" height="1.5" fill="#A855F7" opacity="0.8" />
-      <rect x="35.2" y="19.5" width="1.8" height="1.5" fill="#00D4FF" opacity="0.5" />
-      <rect x="32.2" y="22.5" width="1.8" height="1.5" fill="#00D4FF" opacity="0.9" />
-      <rect x="35.2" y="22.5" width="1.8" height="1.5" fill="#00FF88" opacity="0.6" />
-      {/* Small right building */}
-      <rect x="39" y="26" width="5" height="10" fill="#00D4FF" opacity="0.55" rx="0.5" />
-      <rect x="40" y="27.5" width="1.6" height="1.5" fill="#A855F7" opacity="0.7" />
-      {/* Drone */}
-      <circle cx="10" cy="18" r="1.5" fill="#00D4FF" opacity="0.6" />
-      <line x1="8" y1="18" x2="12" y2="18" stroke="#00D4FF" strokeOpacity="0.4" strokeWidth="0.8" />
-      <line x1="10" y1="16" x2="10" y2="20" stroke="#00D4FF" strokeOpacity="0.4" strokeWidth="0.8" />
-      {/* Data stream dots */}
-      <circle cx="38" cy="14" r="0.9" fill="#00FF88" opacity="0.8" />
-      <circle cx="40" cy="12" r="0.6" fill="#A855F7" opacity="0.7" />
-      <circle cx="42" cy="10" r="0.5" fill="#00D4FF" opacity="0.6" />
+      <rect x="22.5" y="5" width="3" height="5" fill="#FF0090" rx="1" />
+      {/* Beacon dot */}
+      <circle cx="24" cy="4" r="3" fill="#CAFF00" />
+      <circle cx="24" cy="4" r="1.5" fill="#FF0090" />
+      {/* Window highlights — lime on left buildings */}
+      <rect x="17.5" y="17" width="2" height="1.8" fill="rgba(0,0,0,0.5)" rx="0.3" />
+      <rect x="20.5" y="17" width="2" height="1.8" fill="rgba(0,0,0,0.5)" rx="0.3" />
+      <rect x="17.5" y="21" width="2" height="1.8" fill="rgba(0,0,0,0.4)" rx="0.3" />
+      <rect x="20.5" y="21" width="2" height="1.8" fill="rgba(255,0,144,0.7)" rx="0.3" />
+      <rect x="17.5" y="25" width="2" height="1.8" fill="rgba(255,0,144,0.5)" rx="0.3" />
+      <rect x="20.5" y="25" width="2" height="1.8" fill="rgba(0,0,0,0.4)" rx="0.3" />
+      {/* Right tower windows */}
+      <rect x="30" y="25" width="2" height="1.8" fill="rgba(0,0,0,0.4)" rx="0.3" />
+      <rect x="33.5" y="25" width="2" height="1.8" fill="rgba(255,0,144,0.6)" rx="0.3" />
     </svg>
   );
 }
