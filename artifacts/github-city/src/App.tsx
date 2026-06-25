@@ -10,11 +10,12 @@ import LoadingOverlay from './components/ui/LoadingOverlay';
 import Leaderboard from './components/ui/Leaderboard';
 import NeighborCities from './components/ui/NeighborCities';
 import { AboutModal, HowToPlayModal } from './components/ui/InfoModals';
+import { PrivacyPage, TermsPage, CookiesPage, LegalFooterLinks } from './components/ui/LegalPages';
 import { MARS_PALETTE } from './utils/colors';
 
 const HeroCity3D = lazy(() => import('./components/city/HeroCity3D'));
 
-const RESERVED_PATHS = new Set(['u', 'api', 'share', 'top', '']);
+const RESERVED_PATHS = new Set(['u', 'api', 'share', 'top', '', 'privacy', 'terms', 'cookies']);
 
 // Base path from Vite — "/AGENTCITY" in production, "" in dev
 const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -65,24 +66,53 @@ export default function App() {
   const [showLeaderboard, setShowLeaderboard] = useState(
     getRelativePath() === '/top'
   );
+  const [legalPage, setLegalPage] = useState<'privacy' | 'terms' | 'cookies' | null>(() => {
+    const rel = getRelativePath().slice(1);
+    if (rel === 'privacy' || rel === 'terms' || rel === 'cookies') return rel;
+    return null;
+  });
 
   const hasCity = cityData !== null && loading.step === 'done';
   const skyColor = MARS_PALETTE.skyDay;
 
+  const handleBackFromLegal = () => {
+    setLegalPage(null);
+    pushPath(lastUsername ? `/${lastUsername}` : '/');
+  };
+
+  useEffect(() => {
+    const onPopState = () => {
+      const rel = getRelativePath().slice(1);
+      if (rel === 'privacy' || rel === 'terms' || rel === 'cookies') {
+        setLegalPage(rel);
+        setShowLeaderboard(false);
+      } else if (rel === 'top') {
+        setLegalPage(null);
+        setShowLeaderboard(true);
+      } else {
+        setLegalPage(null);
+        setShowLeaderboard(false);
+      }
+    };
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
+  }, []);
+
   useEffect(() => {
     if (getRelativePath() === '/top') return;
+    if (legalPage) return;
     const u = usernameFromPath();
     if (u) { setUsername(u); buildCity(u); }
   }, []);
 
   useEffect(() => {
-    if (lastUsername && hasCity && !showLeaderboard) {
+    if (lastUsername && hasCity && !showLeaderboard && !legalPage) {
       const target = `/${lastUsername}`;
       if (getRelativePath() !== target) {
         pushPath(target);
       }
     }
-  }, [lastUsername, hasCity, showLeaderboard]);
+  }, [lastUsername, hasCity, showLeaderboard, legalPage]);
 
   useEffect(() => {
     setShowNeighbors(false);
@@ -107,6 +137,10 @@ export default function App() {
     buildCity(neighborUsername);
     pushPath(`/${neighborUsername}`);
   };
+
+  if (legalPage === 'privacy') return <PrivacyPage onBack={handleBackFromLegal} />;
+  if (legalPage === 'terms') return <TermsPage onBack={handleBackFromLegal} />;
+  if (legalPage === 'cookies') return <CookiesPage onBack={handleBackFromLegal} />;
 
   if (showLeaderboard) {
     return (
@@ -613,7 +647,7 @@ function LandingHero({ onShowLeaderboard }: { onShowLeaderboard: () => void }) {
             </button>
           </div>
 
-          {/* Powered by GitHub */}
+          {/* Powered by GitHub + legal footer */}
           <div
             className="pointer-events-auto flex flex-col items-center gap-1.5 mt-4"
             style={{ animation: 'gc-fade-up 0.6s ease-out 0.85s both' }}
@@ -627,6 +661,7 @@ function LandingHero({ onShowLeaderboard }: { onShowLeaderboard: () => void }) {
                 POWERED BY GITHUB
               </span>
             </div>
+            <LegalFooterLinks />
           </div>
         </div>
       )}
