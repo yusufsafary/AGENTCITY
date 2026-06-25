@@ -7,9 +7,9 @@ function NeuralNodeSculpture({ nightMode }: { nightMode: boolean }) {
   const groupRef = useRef<THREE.Group>(null);
   const ringsRef = useRef<(THREE.Mesh | null)[]>([]);
   const coreRef = useRef<THREE.Mesh>(null);
-  const CYAN = '#00D4FF';
-  const PURPLE = '#A855F7';
-  const GREEN = '#00FF88';
+  const CYAN = '#CAFF00';
+  const PURPLE = '#FF0090';
+  const GREEN = '#CAFF00';
 
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime();
@@ -60,7 +60,7 @@ function NeuralNodeSculpture({ nightMode }: { nightMode: boolean }) {
         {/* Orbiting node spheres */}
         {[0, 1, 2, 3, 4, 5].map(i => {
           const a = (i / 6) * Math.PI * 2;
-          const COLORS = [CYAN, PURPLE, GREEN, '#F472B6', '#FBBF24', '#3B82F6'];
+          const COLORS = [CYAN, PURPLE, CYAN, PURPLE, CYAN, PURPLE];
           return (
             <mesh key={`ns-${i}`} position={[Math.cos(a) * 0.5, Math.sin(a) * 0.28, Math.sin(a + 1.2) * 0.3]}>
               <sphereGeometry args={[0.030, 6, 6]} />
@@ -110,20 +110,20 @@ function HoloTerminal({ x, z, rotY = 0, nightMode }: { x: number; z: number; rot
         <boxGeometry args={[0.55, 0.72, 0.015]} />
         <meshStandardMaterial
           ref={screenRef}
-          color="#00D4FF"
-          emissive="#00D4FF"
+          color="#CAFF00"
+          emissive="#CAFF00"
           emissiveIntensity={1.0}
-          transparent opacity={0.55}
+          transparent opacity={0.45}
           roughness={0.05} metalness={0.5}
         />
       </mesh>
       {/* Screen scanline */}
       <mesh ref={scanRef} position={[0, 0.7, 0.055]}>
         <boxGeometry args={[0.53, 0.018, 0.005]} />
-        <meshBasicMaterial color="#00FF88" transparent opacity={0.4} depthWrite={false} />
+        <meshBasicMaterial color="#FF0090" transparent opacity={0.5} depthWrite={false} />
       </mesh>
       {/* Screen glow */}
-      {nightMode && <pointLight position={[0, 1.05, 0.2]} color="#00D4FF" intensity={1.2} distance={3.5} decay={2} />}
+      {nightMode && <pointLight position={[0, 1.05, 0.2]} color="#CAFF00" intensity={1.2} distance={3.5} decay={2} />}
     </group>
   );
 }
@@ -154,21 +154,21 @@ function DroneLandingPad({ x, z }: { x: number; z: number }) {
       {/* Outer ring */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.002, 0]}>
         <ringGeometry args={[0.95, 1.08, 24]} />
-        <meshStandardMaterial color="#00D4FF" emissive="#00D4FF" emissiveIntensity={0.8} roughness={0.1} />
+        <meshStandardMaterial color="#CAFF00" emissive="#CAFF00" emissiveIntensity={0.8} roughness={0.1} />
       </mesh>
       {/* Inner ring */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.002, 0]}>
         <ringGeometry args={[0.38, 0.48, 24]} />
-        <meshStandardMaterial ref={arrowRef} color="#A855F7" emissive="#A855F7" emissiveIntensity={0.6} roughness={0.1} />
+        <meshStandardMaterial ref={arrowRef} color="#FF0090" emissive="#FF0090" emissiveIntensity={0.6} roughness={0.1} />
       </mesh>
       {/* H symbol bars */}
       <mesh position={[0, 0.008, 0]} rotation={[-Math.PI/2, 0, 0]}>
         <planeGeometry args={[0.60, 0.10]} />
-        <meshStandardMaterial color="#00D4FF" emissive="#00D4FF" emissiveIntensity={1.0} transparent opacity={0.85} roughness={0.1} />
+        <meshStandardMaterial color="#CAFF00" emissive="#CAFF00" emissiveIntensity={1.0} transparent opacity={0.85} roughness={0.1} />
       </mesh>
       <mesh position={[0, 0.008, 0]} rotation={[-Math.PI/2, Math.PI/2, 0]}>
         <planeGeometry args={[0.60, 0.10]} />
-        <meshStandardMaterial color="#00D4FF" emissive="#00D4FF" emissiveIntensity={1.0} transparent opacity={0.85} roughness={0.1} />
+        <meshStandardMaterial color="#CAFF00" emissive="#CAFF00" emissiveIntensity={1.0} transparent opacity={0.85} roughness={0.1} />
       </mesh>
       {/* Corner lights */}
       {[0, 1, 2, 3, 4, 5, 6, 7].map(i => {
@@ -177,7 +177,7 @@ function DroneLandingPad({ x, z }: { x: number; z: number }) {
           <mesh key={i} position={[Math.cos(a) * 1.0, 0.02, Math.sin(a) * 1.0]}>
             <sphereGeometry args={[0.040, 5, 5]} />
             <meshStandardMaterial ref={el => { lightRefs.current[i] = el; }}
-              color="#00FF88" emissive="#00FF88" emissiveIntensity={4.0} roughness={0.1} />
+              color={i % 2 === 0 ? '#CAFF00' : '#FF0090'} emissive={i % 2 === 0 ? '#CAFF00' : '#FF0090'} emissiveIntensity={4.0} roughness={0.1} />
           </mesh>
         );
       })}
@@ -221,14 +221,14 @@ function DataRelayTower({ x, z, nightMode }: { x: number; z: number; nightMode: 
       {/* Top blink */}
       <mesh position={[0, 2.4, 0]}>
         <sphereGeometry args={[0.025, 5, 5]} />
-        <meshStandardMaterial color="#00D4FF" emissive="#00D4FF" emissiveIntensity={3.5} roughness={0.05} />
+        <meshStandardMaterial color="#CAFF00" emissive="#CAFF00" emissiveIntensity={3.5} roughness={0.05} />
       </mesh>
       {/* Beam cone */}
       <mesh ref={beamRef} position={[0, 3.5, 0]}>
         <coneGeometry args={[0.8, 2.5, 16, 1, true]} />
-        <meshBasicMaterial color="#00D4FF" transparent opacity={0.08} side={THREE.DoubleSide} depthWrite={false} />
+        <meshBasicMaterial color="#CAFF00" transparent opacity={0.10} side={THREE.DoubleSide} depthWrite={false} />
       </mesh>
-      {nightMode && <pointLight position={[0, 2.4, 0]} color="#00D4FF" intensity={2.0} distance={8} decay={2} />}
+      {nightMode && <pointLight position={[0, 2.4, 0]} color="#CAFF00" intensity={2.0} distance={8} decay={2} />}
     </group>
   );
 }
@@ -252,10 +252,10 @@ function AIStreetLamp({ x, z, nightMode }: { x: number; z: number; nightMode: bo
       </mesh>
       <mesh position={[0.50, 2.42, 0]}>
         <boxGeometry args={[0.11, 0.025, 0.08]} />
-        <meshStandardMaterial color="#00D4FF" emissive="#00D4FF" emissiveIntensity={glowInt} roughness={0.05} />
+        <meshStandardMaterial color="#CAFF00" emissive="#CAFF00" emissiveIntensity={glowInt} roughness={0.05} />
       </mesh>
       {nightMode && (
-        <pointLight position={[0.50, 2.40, 0]} color="#00D4FF" intensity={2.5} distance={7} decay={2} />
+        <pointLight position={[0.50, 2.40, 0]} color="#CAFF00" intensity={2.5} distance={7} decay={2} />
       )}
     </group>
   );
@@ -285,7 +285,7 @@ function CoolingTower({ x, z }: { x: number; z: number }) {
       </mesh>
       <mesh position={[0, 0.82, 0]}>
         <torusGeometry args={[0.23, 0.02, 6, 18]} />
-        <meshStandardMaterial color="#00D4FF" emissive="#00D4FF" emissiveIntensity={0.6} roughness={0.1} />
+        <meshStandardMaterial color="#CAFF00" emissive="#CAFF00" emissiveIntensity={0.6} roughness={0.1} />
       </mesh>
       {Array.from({ length: 5 }, (_, i) => (
         <mesh key={i} ref={el => { vaporRefs.current[i] = el; }} position={[0, 0.5 + i * 0.15, 0]}>
@@ -368,7 +368,7 @@ function DataStream({ x1, z1, x2, z2 }: { x1: number; z1: number; x2: number; z2
       {Array.from({ length: N }, (_, i) => (
         <mesh key={i} ref={el => { particlesRef.current[i] = el; }} position={[x1, 1.5, z1]}>
           <sphereGeometry args={[0.038, 4, 4]} />
-          <meshBasicMaterial color={i % 2 === 0 ? '#00D4FF' : '#A855F7'} transparent opacity={0} depthWrite={false} />
+          <meshBasicMaterial color={i % 2 === 0 ? '#CAFF00' : '#FF0090'} transparent opacity={0} depthWrite={false} />
         </mesh>
       ))}
     </>
