@@ -178,16 +178,121 @@ export default function App() {
   );
 }
 
+/* ── Neural network decorative SVG overlay ── */
+function NeuralOverlay() {
+  const nodes = [
+    { x: 18, y: 22 }, { x: 82, y: 15 }, { x: 50, y: 38 },
+    { x: 12, y: 65 }, { x: 88, y: 70 }, { x: 35, y: 80 },
+    { x: 72, y: 48 }, { x: 25, y: 45 }, { x: 65, y: 28 },
+  ];
+  const edges = [
+    [0,2],[1,2],[2,6],[2,7],[3,7],[4,6],[5,3],[6,1],[7,0],[8,1],[8,6],
+  ];
+  return (
+    <svg
+      className="absolute inset-0 w-full h-full pointer-events-none"
+      viewBox="0 0 100 100" preserveAspectRatio="none"
+      style={{ zIndex: 1, opacity: 0.22 }}
+    >
+      <defs>
+        <marker id="arrow" markerWidth="4" markerHeight="4" refX="2" refY="2" orient="auto">
+          <circle cx="2" cy="2" r="1" fill="#00D4FF" opacity="0.6" />
+        </marker>
+      </defs>
+      {edges.map(([a, b], i) => {
+        const na = nodes[a], nb = nodes[b];
+        const len = Math.hypot(nb.x - na.x, nb.y - na.y);
+        return (
+          <line key={i} x1={na.x} y1={na.y} x2={nb.x} y2={nb.y}
+            stroke={i % 3 === 0 ? '#CAFF00' : i % 3 === 1 ? '#00D4FF' : '#FF0090'}
+            strokeWidth="0.25" strokeOpacity="0.5"
+            strokeDasharray={`${len * 0.3} ${len * 0.7}`}
+            style={{
+              animation: `gc-neural-pulse ${2.5 + i * 0.4}s linear infinite`,
+              animationDelay: `${i * 0.3}s`,
+            }}
+          />
+        );
+      })}
+      {nodes.map((n, i) => (
+        <circle key={i} cx={n.x} cy={n.y} r={i === 2 ? 1.2 : 0.7}
+          fill={i % 3 === 0 ? '#CAFF00' : i % 3 === 1 ? '#00D4FF' : '#FF0090'}
+          style={{ animation: `gc-pulse-glow ${1.5 + i * 0.25}s ease-in-out ${i * 0.2}s infinite` }}
+        />
+      ))}
+    </svg>
+  );
+}
+
+/* ── Horizontal data stream strips ── */
+function DataStreams() {
+  const streams = [
+    { y: '28%', color: '#00D4FF', delay: '0s',   dur: '3.2s', text: '01001010 10110100 00101101' },
+    { y: '52%', color: '#CAFF00', delay: '1.1s',  dur: '4.0s', text: 'NEURAL_LINK::ACTIVE > AGENTS:247' },
+    { y: '71%', color: '#FF0090', delay: '0.5s',  dur: '3.6s', text: 'COMMIT_HASH:a3f9d2 > BUILDING_CITY...' },
+    { y: '85%', color: '#00D4FF', delay: '1.8s',  dur: '2.9s', text: '11001101 01100110 10011001' },
+  ];
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 2 }}>
+      {streams.map((s, i) => (
+        <div
+          key={i}
+          className="absolute text-[8px] font-mono whitespace-nowrap"
+          style={{
+            top: s.y, left: 0,
+            color: s.color,
+            opacity: 0.28,
+            letterSpacing: '0.12em',
+            animation: `gc-data-stream ${s.dur} linear ${s.delay} infinite`,
+          }}
+        >
+          {s.text}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* ── Live agent status ticker ── */
+function LiveStatus() {
+  const [count, setCount] = useState(247);
+  useEffect(() => {
+    const id = setInterval(() => setCount(c => c + Math.floor(Math.random() * 3) - 1), 2800);
+    return () => clearInterval(id);
+  }, []);
+  return (
+    <div
+      className="flex items-center gap-1.5 px-2.5 py-1 rounded-full"
+      style={{
+        background: 'rgba(0,212,255,0.08)',
+        border: '1px solid rgba(0,212,255,0.22)',
+        backdropFilter: 'blur(8px)',
+      }}
+    >
+      <span className="gc-heartbeat inline-block w-1.5 h-1.5 rounded-full bg-[#00D4FF]" />
+      <span className="text-[10px] font-mono text-[#00D4FF]" style={{ letterSpacing: '0.08em' }}>
+        {count} AGENTS ONLINE
+      </span>
+    </div>
+  );
+}
+
 function LandingHero({ onShowLeaderboard }: { onShowLeaderboard: () => void }) {
   const [showAbout, setShowAbout] = useState(false);
   const [showHowTo, setShowHowTo] = useState(false);
   const landscape = useIsLandscape();
 
   return (
-    <div className="absolute inset-0" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
+    <div className="absolute inset-0 gc-scanlines" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
       <Suspense fallback={<div className="absolute inset-0" style={{ background: '#060D1F' }} />}>
         <HeroCity3D />
       </Suspense>
+
+      {/* Neural network decorative overlay */}
+      <NeuralOverlay />
+
+      {/* Horizontal data streams */}
+      <DataStreams />
 
       <div
         className="absolute inset-0 pointer-events-none"
@@ -196,18 +301,19 @@ function LandingHero({ onShowLeaderboard }: { onShowLeaderboard: () => void }) {
             'linear-gradient(to bottom, rgba(0,0,0,0.65) 0%, transparent 35%)',
             'radial-gradient(ellipse 70% 60% at 50% 45%, rgba(0,12,30,0.55) 0%, transparent 100%)',
           ].join(', '),
+          zIndex: 3,
         }}
       />
 
       {landscape ? (
         <div
           className="absolute inset-0 flex items-center justify-center pointer-events-none"
-          style={{ paddingTop: 'max(52px, env(safe-area-inset-top))', paddingLeft: 'env(safe-area-inset-left)', paddingRight: 'env(safe-area-inset-right)' }}
+          style={{ paddingTop: 'max(52px, env(safe-area-inset-top))', paddingLeft: 'env(safe-area-inset-left)', paddingRight: 'env(safe-area-inset-right)', zIndex: 10 }}
         >
           <div className="flex flex-col items-center gap-1.5 pointer-events-auto mr-6">
             <AgentCityLogo size={46} />
             <h1
-              className="text-[1.55rem] font-bold leading-tight drop-shadow-lg text-center"
+              className="text-[1.55rem] font-bold leading-tight drop-shadow-lg text-center gc-hologram"
               style={{ letterSpacing: '-0.025em', textShadow: '0 0 20px #CAFF0066, 0 2px 12px rgba(0,0,0,0.8)', color: '#CAFF00' }}
             >
               Agent City
@@ -220,6 +326,7 @@ function LandingHero({ onShowLeaderboard }: { onShowLeaderboard: () => void }) {
             </p>
           </div>
           <div className="flex flex-col items-start gap-2 pointer-events-auto">
+            <LiveStatus />
             <button
               onClick={onShowLeaderboard}
               className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200"
@@ -257,43 +364,137 @@ function LandingHero({ onShowLeaderboard }: { onShowLeaderboard: () => void }) {
             paddingBottom: 'max(32px, env(safe-area-inset-bottom))',
             paddingLeft: 'env(safe-area-inset-left)',
             paddingRight: 'env(safe-area-inset-right)',
+            zIndex: 10,
           }}
         >
-          <div className="gc-float gc-fade-up-1 mb-4 pointer-events-auto">
-            <AgentCityLogo size={72} />
+          {/* Logo with orbital rings + beacon pulses */}
+          <div className="gc-float gc-fade-up-1 mb-4 pointer-events-auto relative" style={{ width: 100, height: 100 }}>
+            {/* Beacon pulse rings */}
+            {[0, 1, 2].map(i => (
+              <div
+                key={i}
+                className="absolute rounded-full pointer-events-none"
+                style={{
+                  inset: '50%',
+                  width: 20, height: 20,
+                  marginLeft: -10, marginTop: -10,
+                  border: '1.5px solid #CAFF00',
+                  animation: `gc-beacon-ring 2.4s ease-out ${i * 0.8}s infinite`,
+                }}
+              />
+            ))}
+            {/* Orbital ring 1 (cyan, slow CW) */}
+            <div
+              className="absolute rounded-full pointer-events-none"
+              style={{
+                inset: 4,
+                border: '1px solid transparent',
+                borderTopColor: '#00D4FF',
+                borderRightColor: 'rgba(0,212,255,0.3)',
+                animation: 'gc-orbit-cw 6s linear infinite',
+              }}
+            />
+            {/* Orbital ring 2 (pink, faster CCW, tilted) */}
+            <div
+              className="absolute rounded-full pointer-events-none"
+              style={{
+                inset: 10,
+                border: '1px solid transparent',
+                borderBottomColor: '#FF0090',
+                borderLeftColor: 'rgba(255,0,144,0.3)',
+                animation: 'gc-orbit-ccw 4s linear infinite',
+                transform: 'rotateX(60deg)',
+              }}
+            />
+            {/* Orbital dot on ring 1 */}
+            <div
+              className="absolute pointer-events-none"
+              style={{
+                top: 4, left: '50%', marginLeft: -3,
+                width: 6, height: 6, borderRadius: '50%',
+                background: '#00D4FF',
+                boxShadow: '0 0 8px #00D4FF',
+                transformOrigin: '3px calc(50% - 4px)',
+                animation: 'gc-orbit-cw 6s linear infinite',
+              }}
+            />
+            {/* Logo centered */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <AgentCityLogo size={72} />
+            </div>
           </div>
 
+          {/* Glitch title */}
           <div className="gc-fade-up-2 text-center">
-            <h1
-              className="text-[2.2rem] font-bold leading-tight drop-shadow-lg"
-              style={{ letterSpacing: '-0.03em', color: '#CAFF00', textShadow: '0 0 30px #CAFF0055, 0 2px 16px rgba(0,0,0,0.7)' }}
-            >
-              Agent City
-            </h1>
-            <div className="mx-auto mt-2 h-[2px] w-12 rounded-full" style={{ background: 'linear-gradient(90deg, #CAFF00, #FF0090)', opacity: 0.9 }} />
+            <div className="relative inline-block">
+              <h1
+                className="text-[2.2rem] font-bold leading-tight gc-hologram"
+                style={{ letterSpacing: '-0.03em', color: '#CAFF00', textShadow: '0 0 30px #CAFF0055, 0 0 60px #CAFF0022, 0 2px 16px rgba(0,0,0,0.7)' }}
+              >
+                Agent City
+              </h1>
+              {/* Glitch layers */}
+              <h1
+                aria-hidden="true"
+                className="gc-glitch-1 text-[2.2rem] font-bold leading-tight"
+                style={{ letterSpacing: '-0.03em', color: '#00D4FF', position: 'absolute', inset: 0, pointerEvents: 'none' }}
+              >
+                Agent City
+              </h1>
+              <h1
+                aria-hidden="true"
+                className="gc-glitch-2 text-[2.2rem] font-bold leading-tight"
+                style={{ letterSpacing: '-0.03em', color: '#FF0090', position: 'absolute', inset: 0, pointerEvents: 'none' }}
+              >
+                Agent City
+              </h1>
+            </div>
+            {/* Animated gradient separator */}
+            <div
+              className="mx-auto mt-2 h-[2px] w-20 rounded-full"
+              style={{
+                background: 'linear-gradient(90deg, transparent, #CAFF00, #00D4FF, #FF0090, transparent)',
+                backgroundSize: '200% 100%',
+                animation: 'gc-border-chase 2s linear infinite',
+              }}
+            />
           </div>
 
+          {/* Subtitle with typewriter cursor */}
           <p
             className="gc-fade-up-3 mt-3 text-white/75 text-[0.88rem] leading-relaxed font-light text-center"
             style={{ textShadow: '0 1px 8px rgba(0,0,0,0.7)', maxWidth: '220px' }}
           >
             A futuristic metropolis<br />inhabited by AI agents —<br />built from your GitHub activity
+            <span className="gc-cursor ml-0.5 font-bold text-[#00D4FF]">|</span>
           </p>
 
-          {/* Animated agent badges */}
+          {/* Live status */}
+          <div className="gc-fade-up-3 mt-3 pointer-events-auto" style={{ animationDelay: '0.5s' }}>
+            <LiveStatus />
+          </div>
+
+          {/* Expanded agent badges with spawn animation */}
           <div
-            className="gc-fade-up-4 mt-4 flex items-center gap-2"
-            style={{ animation: 'gc-fade-up 0.6s ease-out 0.45s both' }}
+            className="mt-3 flex flex-wrap items-center justify-center gap-1.5"
+            style={{ maxWidth: 280, animation: 'gc-fade-up 0.6s ease-out 0.45s both' }}
           >
-            {['🤖 Builder', '🧠 Thinker', '⚡ Executor'].map((label, i) => (
+            {[
+              { label: '🤖 Builder',   color: '#CAFF00', bg: 'rgba(202,255,0,0.10)',   border: 'rgba(202,255,0,0.28)' },
+              { label: '🧠 Thinker',   color: '#FF0090', bg: 'rgba(255,0,144,0.12)',  border: 'rgba(255,0,144,0.30)' },
+              { label: '⚡ Executor',  color: '#00D4FF', bg: 'rgba(0,212,255,0.10)',  border: 'rgba(0,212,255,0.28)' },
+              { label: '🔍 Analyst',   color: '#CAFF00', bg: 'rgba(202,255,0,0.08)',   border: 'rgba(202,255,0,0.22)' },
+              { label: '🛡 Guardian',  color: '#FF0090', bg: 'rgba(255,0,144,0.08)',  border: 'rgba(255,0,144,0.22)' },
+              { label: '🌐 Networker', color: '#00D4FF', bg: 'rgba(0,212,255,0.08)',  border: 'rgba(0,212,255,0.22)' },
+            ].map(({ label, color, bg, border }, i) => (
               <span
                 key={i}
-                className="text-[10px] font-semibold px-2 py-1 rounded-full"
+                className="text-[9px] font-semibold px-2 py-0.5 rounded-full"
                 style={{
-                  background: i === 1 ? 'rgba(255,0,144,0.12)' : 'rgba(202,255,0,0.10)',
-                  border: `1px solid ${i === 1 ? 'rgba(255,0,144,0.30)' : 'rgba(202,255,0,0.28)'}`,
-                  color: i === 1 ? '#FF0090' : '#CAFF00',
+                  background: bg, border: `1px solid ${border}`, color,
                   letterSpacing: '0.04em',
+                  animation: `gc-agent-spawn 0.5s ease-out ${0.6 + i * 0.12}s both`,
+                  boxShadow: `0 0 8px ${color}22`,
                 }}
               >
                 {label}
@@ -303,11 +504,11 @@ function LandingHero({ onShowLeaderboard }: { onShowLeaderboard: () => void }) {
 
           <button
             onClick={onShowLeaderboard}
-            className="pointer-events-auto mt-6 flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200"
+            className="pointer-events-auto mt-5 flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 gc-neon-border"
             style={{
               background: '#CAFF00',
               color: '#000',
-              boxShadow: '0 0 24px rgba(202,255,0,0.40)',
+              boxShadow: '0 0 24px rgba(202,255,0,0.45), 0 0 48px rgba(202,255,0,0.15)',
               animation: 'gc-fade-up 0.6s ease-out 0.55s both',
             }}
           >
