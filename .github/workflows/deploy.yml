@@ -38,7 +38,7 @@ jobs:
       - name: Build
         working-directory: artifacts/github-city
         env:
-          BASE_PATH: /AGENTCITY/
+          BASE_PATH: /
         run: pnpm run build
 
       - name: Setup Pages
