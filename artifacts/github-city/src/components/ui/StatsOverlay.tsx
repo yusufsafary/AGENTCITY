@@ -16,8 +16,8 @@ interface StatsOverlayProps {
 export default function StatsOverlay({ stats, username, nightMode }: StatsOverlayProps) {
   const [open, setOpen] = useState(true);
 
-  const bg = nightMode ? 'rgba(15,3,21,0.88)' : 'rgba(28,14,6,0.84)';
-  const border = nightMode ? 'rgba(255,255,255,0.10)' : 'rgba(74,191,176,0.22)';
+  const bg = nightMode ? 'rgba(15,3,21,0.88)' : 'rgba(4,8,15,0.84)';
+  const border = nightMode ? 'rgba(255,255,255,0.10)' : 'rgba(202,255,0,0.20)';
   const sub = nightMode ? 'rgba(255,255,255,0.48)' : 'rgba(255,255,255,0.52)';
   const divLine = nightMode ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.12)';
 
@@ -45,7 +45,7 @@ export default function StatsOverlay({ stats, username, nightMode }: StatsOverla
             color: 'white', minHeight: 40,
           }}
         >
-          <BarChart2 size={13} color="#4ABFB0" style={{ flexShrink: 0 }} />
+          <BarChart2 size={13} color="#CAFF00" style={{ flexShrink: 0 }} />
           <span style={{
             flex: 1, textAlign: 'left', fontSize: 12, fontWeight: 600,
             letterSpacing: '-0.01em', overflow: 'hidden',
