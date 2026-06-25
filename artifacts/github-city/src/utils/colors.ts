@@ -20,18 +20,28 @@ export const LANGUAGE_COLORS: Record<string, string> = {
   default: '#8b949e',
 };
 
+export const BRAND = {
+  lime: '#CAFF00',
+  pink: '#FF0090',
+  limeDim: 'rgba(202,255,0,0.15)',
+  pinkDim: 'rgba(255,0,144,0.15)',
+  limeGlow: 'rgba(202,255,0,0.35)',
+  pinkGlow: 'rgba(255,0,144,0.25)',
+  gradient: 'linear-gradient(135deg, #CAFF00 0%, #FF0090 100%)',
+};
+
 export const MARS_PALETTE = {
   skyDay: '#060D1F',
   skyHorizon: '#0A1A3A',
   fogDay: '#040810',
   groundDay: '#0A0F1E',
   groundRoad: '#0D1525',
-  sandLight: '#00D4FF',
-  domeGlass: '#00D4FF',
-  domeDark: '#0099BB',
-  buildingTint: '#00D4FF',
-  sunGlow: '#A855F7',
-  greenPatch: '#00FF88',
+  sandLight: '#CAFF00',
+  domeGlass: '#CAFF00',
+  domeDark: '#99BB00',
+  buildingTint: '#CAFF00',
+  sunGlow: '#FF0090',
+  greenPatch: '#CAFF00',
 };
 
 export const NIGHT_PALETTE = {
