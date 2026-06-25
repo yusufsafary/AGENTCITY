@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, lazy, Suspense } from 'react';
+import { useState, useEffect, useCallback, lazy, Suspense, useRef } from 'react';
 import { useGitHubCity } from './hooks/useGitHubCity';
 import type { BuildingData } from './types/github';
 import CityScene from './components/city/CityScene';
