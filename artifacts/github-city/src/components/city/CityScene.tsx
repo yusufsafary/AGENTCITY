@@ -10,6 +10,8 @@ import DowntownSkyline from './DowntownSkyline';
 import Traffic from './Traffic';
 import CityLife from './CityLife';
 
+export type ScreenshotRef = { capture: () => string | null };
+
 const SKY_DEEP = '#060D1F';
 const SKY_FOG  = '#020408';
 const LIME = '#CAFF00';
@@ -20,6 +22,21 @@ interface CitySceneProps {
   nightMode: boolean;
   showSkyline: boolean;
   onSelectBuilding: (data: BuildingData | null) => void;
+  screenshotRef?: React.RefObject<ScreenshotRef | null>;
+}
+
+/* ── Screenshot capture — inside Canvas so we can access gl ─ */
+function ScreenshotCapture({ screenshotRef }: { screenshotRef?: React.RefObject<ScreenshotRef | null> }) {
+  const { gl } = useThree();
+  if (screenshotRef) {
+    (screenshotRef as React.MutableRefObject<ScreenshotRef>).current = {
+      capture: () => {
+        try { return gl.domElement.toDataURL('image/png'); }
+        catch { return null; }
+      },
+    };
+  }
+  return null;
 }
 
 /* ── Lighting ──────────────────────────────────────────── */
@@ -218,19 +235,20 @@ function SkylineWrapper({ bars, nightMode }: { bars: CityData['skyline']; nightM
 }
 
 /* ── Main export ───────────────────────────────────────── */
-export default function CityScene({ cityData, nightMode, showSkyline, onSelectBuilding }: CitySceneProps) {
+export default function CityScene({ cityData, nightMode, showSkyline, onSelectBuilding, screenshotRef }: CitySceneProps) {
   const isMobile = window.innerWidth < 768;
 
   return (
     <Canvas
       shadows={!isMobile}
       camera={{ position: [38, 32, 38], fov: 48, near: 0.1, far: 500 }}
-      gl={{ antialias: !isMobile, powerPreference: 'high-performance' }}
+      gl={{ antialias: !isMobile, powerPreference: 'high-performance', preserveDrawingBuffer: true }}
       style={{ background: SKY_DEEP }}
     >
       <color attach="background" args={[SKY_DEEP]} />
       <fog attach="fog" args={[SKY_FOG, 50, 150]} />
 
+      <ScreenshotCapture screenshotRef={screenshotRef} />
       <SkyBackground />
       <SceneLighting nightMode={nightMode} />
 
