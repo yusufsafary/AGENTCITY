@@ -11,6 +11,7 @@ import Leaderboard from './components/ui/Leaderboard';
 import NeighborCities from './components/ui/NeighborCities';
 import { AboutModal, HowToPlayModal } from './components/ui/InfoModals';
 import { PrivacyPage, TermsPage, CookiesPage, LegalFooterLinks } from './components/ui/LegalPages';
+import CookieConsent from './components/ui/CookieConsent';
 import { MARS_PALETTE } from './utils/colors';
 
 const HeroCity3D = lazy(() => import('./components/city/HeroCity3D'));
@@ -150,6 +151,7 @@ export default function App() {
           onSelect={handleLeaderboardSelect}
           onBack={() => { setShowLeaderboard(false); pushPath(lastUsername ? `/${lastUsername}` : '/'); }}
         />
+        <CookieConsent />
       </div>
     );
   }
@@ -208,6 +210,7 @@ export default function App() {
 
       <BottomSheet building={selectedBuilding} onClose={() => setSelectedBuilding(null)} nightMode={false} />
       <LoadingOverlay state={loading} nightMode={false} />
+      <CookieConsent />
     </div>
   );
 }
