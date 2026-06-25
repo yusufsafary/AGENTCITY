@@ -12,6 +12,7 @@ import NeighborCities from './components/ui/NeighborCities';
 import { AboutModal, HowToPlayModal } from './components/ui/InfoModals';
 import { PrivacyPage, TermsPage, CookiesPage, LegalFooterLinks } from './components/ui/LegalPages';
 import CookieConsent from './components/ui/CookieConsent';
+import { useMetaTags } from './hooks/useMetaTags';
 import { MARS_PALETTE } from './utils/colors';
 
 const HeroCity3D = lazy(() => import('./components/city/HeroCity3D'));
@@ -75,6 +76,16 @@ export default function App() {
 
   const hasCity = cityData !== null && loading.step === 'done';
   const skyColor = MARS_PALETTE.skyDay;
+
+  // Update OG / social meta tags when city loads (helps Discord, Slack, iMessage, WhatsApp)
+  useMetaTags(
+    hasCity && lastUsername
+      ? {
+          username: lastUsername,
+          repos: cityData?.stats.repoCount,
+        }
+      : null,
+  );
 
   const handleBackFromLegal = () => {
     setLegalPage(null);
