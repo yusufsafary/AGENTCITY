@@ -22,13 +22,15 @@
   --foreground: 200 80% 90%;
   --border: 220 40% 18%;
   --input: 220 40% 18%;
-  --ring: 195 100% 50%;
-  --primary: 195 100% 50%;
+  --ring: 74 100% 50%;
+  --primary: 74 100% 50%;
   --primary-foreground: 0 0% 5%;
   --muted: 220 30% 12%;
   --muted-foreground: 220 20% 55%;
   --app-font-sans: 'Space Grotesk', system-ui, sans-serif;
   --radius: 0.75rem;
+  --lime: #CAFF00;
+  --pink: #FF0090;
 }
 
 @layer base {
@@ -67,8 +69,12 @@
 }
 
 @keyframes gc-neon-pulse {
-  0%, 100% { text-shadow: 0 0 8px #00D4FF, 0 0 20px #00D4FF44; }
-  50% { text-shadow: 0 0 16px #00D4FF, 0 0 40px #00D4FF88, 0 0 60px #00D4FF33; }
+  0%, 100% { text-shadow: 0 0 8px #CAFF00, 0 0 20px #CAFF0044; }
+  50% { text-shadow: 0 0 16px #CAFF00, 0 0 40px #CAFF0088, 0 0 60px #FF009033; }
+}
+
+@keyframes gc-brand-spin {
+  to { stroke-dashoffset: -100; }
 }
 
 @keyframes gc-scan-line {
