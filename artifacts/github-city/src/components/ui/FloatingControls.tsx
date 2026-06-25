@@ -1,4 +1,4 @@
-import { GitFork, Building2, Users, Camera } from 'lucide-react';
+import { GitFork, Building2, Users, Camera, Share2 } from 'lucide-react';
 
 interface FloatingControlsProps {
   showForks: boolean;
@@ -9,6 +9,7 @@ interface FloatingControlsProps {
   onToggleNeighbors: () => void;
   onDownload?: () => void;
   downloading?: boolean;
+  onShare?: () => void;
 }
 
 interface IconBtnProps {
@@ -18,9 +19,10 @@ interface IconBtnProps {
   label: string;
   activeColor: string;
   pulse?: boolean;
+  hoverColor?: string;
 }
 
-function IconBtn({ onClick, active, icon, label, activeColor, pulse }: IconBtnProps) {
+function IconBtn({ onClick, active, icon, label, activeColor, pulse, hoverColor }: IconBtnProps) {
   return (
     <button
       onClick={onClick}
@@ -35,6 +37,14 @@ function IconBtn({ onClick, active, icon, label, activeColor, pulse }: IconBtnPr
         animation: pulse ? 'fc-pulse 1s ease-in-out infinite' : undefined,
       }}
       aria-label={label}
+      onMouseEnter={e => {
+        if (!active) (e.currentTarget as HTMLButtonElement).style.background = hoverColor ?? 'rgba(255,255,255,0.07)';
+        (e.currentTarget as HTMLButtonElement).style.color = '#fff';
+      }}
+      onMouseLeave={e => {
+        if (!active) (e.currentTarget as HTMLButtonElement).style.background = 'transparent';
+        (e.currentTarget as HTMLButtonElement).style.color = active ? '#fff' : 'rgba(255,255,255,0.55)';
+      }}
     >
       {icon}
       <style>{`
@@ -61,6 +71,7 @@ export default function FloatingControls({
   showSkyline, onToggleSkyline,
   showNeighbors, onToggleNeighbors,
   onDownload, downloading,
+  onShare,
 }: FloatingControlsProps) {
   return (
     <div style={{
@@ -78,8 +89,9 @@ export default function FloatingControls({
         active={showNeighbors}
         onClick={onToggleNeighbors}
         icon={<Users size={15} />}
-        label={showNeighbors ? 'Tutup Kota Tetangga' : 'Kota Tetangga'}
+        label={showNeighbors ? 'Hide Neighbor Cities' : 'Neighbor Cities'}
         activeColor="rgba(202,255,0,0.25)"
+        hoverColor="rgba(202,255,0,0.12)"
       />
       <Divider />
       <IconBtn
@@ -88,6 +100,7 @@ export default function FloatingControls({
         icon={<GitFork size={15} />}
         label={showForks ? 'Hide Forks' : 'Show Forks'}
         activeColor="rgba(255,0,144,0.25)"
+        hoverColor="rgba(255,0,144,0.12)"
       />
       <Divider />
       <IconBtn
@@ -96,6 +109,7 @@ export default function FloatingControls({
         icon={<Building2 size={15} />}
         label={showSkyline ? 'Hide Skyline' : 'Show Skyline'}
         activeColor="rgba(202,255,0,0.20)"
+        hoverColor="rgba(202,255,0,0.12)"
       />
       {onDownload && (
         <>
@@ -106,7 +120,21 @@ export default function FloatingControls({
             icon={<Camera size={15} />}
             label="Download city as image"
             activeColor="rgba(0,212,255,0.25)"
+            hoverColor="rgba(0,212,255,0.12)"
             pulse={downloading}
+          />
+        </>
+      )}
+      {onShare && (
+        <>
+          <Divider />
+          <IconBtn
+            active={false}
+            onClick={onShare}
+            icon={<Share2 size={15} />}
+            label="Share city on X / Twitter"
+            activeColor="rgba(255,255,255,0.18)"
+            hoverColor="rgba(255,255,255,0.10)"
           />
         </>
       )}
