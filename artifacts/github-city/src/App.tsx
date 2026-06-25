@@ -782,50 +782,115 @@ function LandingHero({ onShowLeaderboard }: { onShowLeaderboard: () => void }) {
             </button>
           </div>
 
-          {/* Builder Twitter card */}
-          <a
-            href="https://x.com/jackie_doll96"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="pointer-events-auto flex items-center gap-2.5 mt-3 px-3.5 py-2.5 rounded-2xl no-underline group"
-            style={{
-              background: 'rgba(4,8,15,0.72)',
-              border: '1px solid rgba(255,255,255,0.10)',
-              backdropFilter: 'blur(12px)',
-              WebkitBackdropFilter: 'blur(12px)',
-              boxShadow: '0 2px 16px rgba(0,0,0,0.35)',
-              maxWidth: 220,
-              animation: 'gc-fade-up 0.6s ease-out 0.78s both',
-              transition: 'border-color 0.18s ease, box-shadow 0.18s ease',
-            }}
-            onMouseEnter={e => {
-              (e.currentTarget as HTMLAnchorElement).style.borderColor = 'rgba(255,255,255,0.22)';
-              (e.currentTarget as HTMLAnchorElement).style.boxShadow = '0 4px 24px rgba(0,0,0,0.5)';
-            }}
-            onMouseLeave={e => {
-              (e.currentTarget as HTMLAnchorElement).style.borderColor = 'rgba(255,255,255,0.10)';
-              (e.currentTarget as HTMLAnchorElement).style.boxShadow = '0 2px 16px rgba(0,0,0,0.35)';
-            }}
+          {/* Builder X card + EasyA launchpad — side by side */}
+          <div
+            className="pointer-events-auto flex items-stretch gap-2 mt-3"
+            style={{ animation: 'gc-fade-up 0.6s ease-out 0.78s both' }}
           >
-            {/* Avatar */}
-            <div
-              className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold"
-              style={{ background: 'linear-gradient(135deg, #4ABFB0, #2CA89A)' }}
+            {/* X / Twitter card */}
+            <a
+              href="https://x.com/jackie_doll96"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2.5 px-3 py-2.5 rounded-2xl no-underline group"
+              style={{
+                background: 'rgba(4,8,15,0.72)',
+                border: '1px solid rgba(255,255,255,0.10)',
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
+                boxShadow: '0 2px 16px rgba(0,0,0,0.30)',
+                transition: 'border-color 0.18s ease, box-shadow 0.18s ease',
+                minWidth: 0,
+              }}
+              onMouseEnter={e => {
+                (e.currentTarget as HTMLAnchorElement).style.borderColor = 'rgba(255,255,255,0.24)';
+                (e.currentTarget as HTMLAnchorElement).style.boxShadow = '0 4px 20px rgba(0,0,0,0.45)';
+              }}
+              onMouseLeave={e => {
+                (e.currentTarget as HTMLAnchorElement).style.borderColor = 'rgba(255,255,255,0.10)';
+                (e.currentTarget as HTMLAnchorElement).style.boxShadow = '0 2px 16px rgba(0,0,0,0.30)';
+              }}
             >
-              J
-            </div>
-            {/* Text */}
-            <div className="min-w-0 flex-1">
-              <p className="text-white/40 text-[10px] leading-none mb-0.5">Built by</p>
-              <p className="text-white/90 text-xs font-semibold leading-tight truncate">@jackie_doll96</p>
-            </div>
-            {/* X logo */}
-            <div className="shrink-0 text-white/35 group-hover:text-white/70 transition-colors">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.254 5.622 5.91-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-              </svg>
-            </div>
-          </a>
+              {/* Real profile photo */}
+              <img
+                src="https://unavatar.io/twitter/jackie_doll96"
+                alt="@jackie_doll96"
+                className="shrink-0 w-8 h-8 rounded-full object-cover"
+                style={{ border: '1.5px solid rgba(74,191,176,0.35)' }}
+                onError={e => {
+                  const t = e.currentTarget;
+                  t.style.display = 'none';
+                  (t.nextSibling as HTMLElement | null)?.removeAttribute('hidden');
+                }}
+              />
+              {/* Fallback initial (hidden by default) */}
+              <div
+                hidden
+                className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold"
+                style={{ background: 'linear-gradient(135deg, #4ABFB0, #2CA89A)' }}
+              >J</div>
+              {/* Text */}
+              <div className="min-w-0">
+                <p className="text-white/40 text-[9px] leading-none mb-0.5 uppercase tracking-wider">Built by</p>
+                <p className="text-white/90 text-[11px] font-semibold leading-tight">@jackie_doll96</p>
+              </div>
+              {/* X logo */}
+              <div className="shrink-0 text-white/30 group-hover:text-white/65 transition-colors ml-0.5">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.254 5.622 5.91-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                </svg>
+              </div>
+            </a>
+
+            {/* Divider */}
+            <div style={{ width: 1, background: 'rgba(255,255,255,0.08)', borderRadius: 1, flexShrink: 0 }} />
+
+            {/* EasyA launchpad card */}
+            <a
+              href="https://www.easya.io"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex flex-col items-center justify-center gap-1 px-3 py-2.5 rounded-2xl no-underline group"
+              style={{
+                background: 'rgba(4,8,15,0.72)',
+                border: '1px solid rgba(74,222,128,0.15)',
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
+                boxShadow: '0 2px 16px rgba(0,0,0,0.30)',
+                transition: 'border-color 0.18s ease, box-shadow 0.18s ease',
+                minWidth: 80,
+              }}
+              onMouseEnter={e => {
+                (e.currentTarget as HTMLAnchorElement).style.borderColor = 'rgba(74,222,128,0.38)';
+                (e.currentTarget as HTMLAnchorElement).style.boxShadow = '0 4px 20px rgba(74,222,128,0.12)';
+              }}
+              onMouseLeave={e => {
+                (e.currentTarget as HTMLAnchorElement).style.borderColor = 'rgba(74,222,128,0.15)';
+                (e.currentTarget as HTMLAnchorElement).style.boxShadow = '0 2px 16px rgba(0,0,0,0.30)';
+              }}
+            >
+              {/* EasyA no-bg logo */}
+              <img
+                src="/easya-nobg.png"
+                alt="EasyA"
+                style={{ width: 28, height: 28, objectFit: 'contain', filter: 'drop-shadow(0 0 6px rgba(74,222,128,0.40))' }}
+              />
+              <div className="text-center">
+                <p className="text-white/40 text-[9px] uppercase tracking-wider leading-none">Launch on</p>
+                <p
+                  className="text-[10px] font-bold leading-tight"
+                  style={{ color: '#4ade80' }}
+                >EasyA</p>
+              </div>
+              {/* AGC token badge */}
+              <span
+                className="text-[8px] font-semibold px-1.5 py-0.5 rounded-full"
+                style={{ background: 'rgba(74,222,128,0.12)', border: '1px solid rgba(74,222,128,0.25)', color: '#4ade80', letterSpacing: '0.05em' }}
+              >
+                $AGC
+              </span>
+            </a>
+          </div>
 
           {/* Powered by GitHub + legal footer */}
           <div
