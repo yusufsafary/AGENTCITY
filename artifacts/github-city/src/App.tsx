@@ -16,6 +16,19 @@ const HeroCity3D = lazy(() => import('./components/city/HeroCity3D'));
 
 const RESERVED_PATHS = new Set(['u', 'api', 'share', 'top', '']);
 
+// Base path from Vite — "/AGENTCITY" in production, "" in dev
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+function getRelativePath(): string {
+  const rel = window.location.pathname.slice(BASE.length);
+  return rel || '/';
+}
+
+function pushPath(path: string) {
+  // path should start with '/', e.g. '/torvalds', '/top', '/'
+  window.history.pushState({}, '', BASE + path);
+}
+
 function useIsLandscape() {
   const check = useCallback(
     () => window.matchMedia('(orientation: landscape) and (max-height: 520px)').matches,
@@ -32,7 +45,8 @@ function useIsLandscape() {
 }
 
 function usernameFromPath(): string {
-  const seg = window.location.pathname.slice(1).split('/')[0];
+  const rel = getRelativePath();
+  const seg = rel.slice(1).split('/')[0];
   if (!seg || RESERVED_PATHS.has(seg)) return '';
   return seg;
 }
@@ -49,14 +63,14 @@ export default function App() {
   const [showNeighbors, setShowNeighbors] = useState(false);
   const [selectedBuilding, setSelectedBuilding] = useState<BuildingData | null>(null);
   const [showLeaderboard, setShowLeaderboard] = useState(
-    window.location.pathname === '/top'
+    getRelativePath() === '/top'
   );
 
   const hasCity = cityData !== null && loading.step === 'done';
   const skyColor = MARS_PALETTE.skyDay;
 
   useEffect(() => {
-    if (window.location.pathname === '/top') return;
+    if (getRelativePath() === '/top') return;
     const u = usernameFromPath();
     if (u) { setUsername(u); buildCity(u); }
   }, []);
@@ -64,8 +78,8 @@ export default function App() {
   useEffect(() => {
     if (lastUsername && hasCity && !showLeaderboard) {
       const target = `/${lastUsername}`;
-      if (window.location.pathname !== target) {
-        window.history.pushState({}, '', target);
+      if (getRelativePath() !== target) {
+        pushPath(target);
       }
     }
   }, [lastUsername, hasCity, showLeaderboard]);
@@ -78,20 +92,20 @@ export default function App() {
     setShowLeaderboard(false);
     setUsername(u);
     buildCity(u);
-    window.history.pushState({}, '', `/${u}`);
+    pushPath(`/${u}`);
   };
 
   const handleToggleLeaderboard = () => {
     const next = !showLeaderboard;
     setShowLeaderboard(next);
-    window.history.pushState({}, '', next ? '/top' : (lastUsername ? `/${lastUsername}` : '/'));
+    pushPath(next ? '/top' : (lastUsername ? `/${lastUsername}` : '/'));
   };
 
   const handleVisitNeighbor = (neighborUsername: string) => {
     setShowNeighbors(false);
     setUsername(neighborUsername);
     buildCity(neighborUsername);
-    window.history.pushState({}, '', `/${neighborUsername}`);
+    pushPath(`/${neighborUsername}`);
   };
 
   if (showLeaderboard) {
@@ -100,7 +114,7 @@ export default function App() {
         <Leaderboard
           nightMode={false}
           onSelect={handleLeaderboardSelect}
-          onBack={() => { setShowLeaderboard(false); window.history.pushState({}, '', lastUsername ? `/${lastUsername}` : '/'); }}
+          onBack={() => { setShowLeaderboard(false); pushPath(lastUsername ? `/${lastUsername}` : '/'); }}
         />
       </div>
     );
