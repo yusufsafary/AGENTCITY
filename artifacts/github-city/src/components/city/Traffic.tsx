@@ -32,10 +32,10 @@ function AIVehicle({ radius, speed, startAngle, color }: MoverProps) {
         <boxGeometry args={[0.42, 0.09, 0.28]} />
         <meshStandardMaterial color={color} metalness={0.6} roughness={0.2} />
       </mesh>
-      {/* Blue glass dome */}
+      {/* Lime glass dome */}
       <mesh position={[0.05, 0.195, 0]}>
         <boxGeometry args={[0.44, 0.07, 0.30]} />
-        <meshStandardMaterial color="#00D4FF" transparent opacity={0.35} metalness={0.95} roughness={0.02} />
+        <meshStandardMaterial color="#CAFF00" transparent opacity={0.30} metalness={0.95} roughness={0.02} />
       </mesh>
       {/* Wheels */}
       {([ [-0.28, 0.05, 0.20], [-0.28, 0.05, -0.20], [0.28, 0.05, 0.20], [0.28, 0.05, -0.20] ] as [number,number,number][]).map(([x,y,z], i) => (
@@ -44,14 +44,14 @@ function AIVehicle({ radius, speed, startAngle, color }: MoverProps) {
           <meshStandardMaterial color="#111" roughness={0.9} />
         </mesh>
       ))}
-      {/* Cyan headlights */}
+      {/* Lime headlights */}
       <mesh position={[0.42, 0.11, 0.12]}>
         <boxGeometry args={[0.018, 0.042, 0.08]} />
-        <meshStandardMaterial color="#00D4FF" emissive="#00D4FF" emissiveIntensity={3.5} />
+        <meshStandardMaterial color="#CAFF00" emissive="#CAFF00" emissiveIntensity={3.5} />
       </mesh>
       <mesh position={[0.42, 0.11, -0.12]}>
         <boxGeometry args={[0.018, 0.042, 0.08]} />
-        <meshStandardMaterial color="#00D4FF" emissive="#00D4FF" emissiveIntensity={3.5} />
+        <meshStandardMaterial color="#CAFF00" emissive="#CAFF00" emissiveIntensity={3.5} />
       </mesh>
       {/* Red tail lights */}
       <mesh position={[-0.42, 0.11, 0.13]}>
@@ -69,7 +69,7 @@ function AIVehicle({ radius, speed, startAngle, color }: MoverProps) {
 }
 
 /* ── AI Robot Agent (pedestrian) ────────────────────────── */
-const ROBOT_COLORS = ['#00D4FF', '#A855F7', '#00FF88', '#F472B6', '#3B82F6', '#FBBF24'];
+const ROBOT_COLORS = ['#CAFF00', '#FF0090', '#CAFF00', '#FF0090', '#CAFF00', '#FF0090'];
 
 interface RobotProps { radius: number; speed: number; startAngle: number; idx: number }
 
@@ -124,7 +124,7 @@ function AIRobot({ radius, speed, startAngle, idx }: RobotProps) {
       {/* Antenna */}
       <mesh position={[0, 0.256, 0]}>
         <cylinderGeometry args={[0.003, 0.003, 0.028, 4]} />
-        <meshStandardMaterial color="#00D4FF" emissive="#00D4FF" emissiveIntensity={1.2} />
+        <meshStandardMaterial color="#CAFF00" emissive="#CAFF00" emissiveIntensity={1.2} />
       </mesh>
       <mesh position={[0, 0.272, 0]}>
         <sphereGeometry args={[0.006, 5, 5]} />
@@ -176,7 +176,7 @@ function SurveillanceDrone({ orbitRadius, orbitHeight, speed, startAngle, color 
       {/* Camera pod */}
       <mesh position={[0, -0.042, 0]}>
         <sphereGeometry args={[0.028, 8, 8]} />
-        <meshStandardMaterial color="#00D4FF" transparent opacity={0.7} metalness={0.9} roughness={0.05} />
+        <meshStandardMaterial color="#CAFF00" transparent opacity={0.7} metalness={0.9} roughness={0.05} />
       </mesh>
       {/* 4 arms */}
       {([0, 1, 2, 3] as number[]).map(i => {
@@ -237,7 +237,7 @@ function DeliveryBot({ radius, speed, startAngle }: { radius: number; speed: num
       {/* LED ring */}
       <mesh position={[0, 0.065, 0]}>
         <torusGeometry args={[0.065, 0.006, 6, 18]} />
-        <meshStandardMaterial ref={ledRef} color="#00FF88" emissive="#00FF88" emissiveIntensity={1.2} roughness={0.1} />
+        <meshStandardMaterial ref={ledRef} color="#CAFF00" emissive="#CAFF00" emissiveIntensity={1.2} roughness={0.1} />
       </mesh>
       {/* Wheels */}
       {([ [0.065, 0.018, 0], [-0.065, 0.018, 0] ] as [number,number,number][]).map(([x,y,z], i) => (
@@ -252,15 +252,15 @@ function DeliveryBot({ radius, speed, startAngle }: { radius: number; speed: num
 
 /* ── Scene data ─────────────────────────────────────────── */
 const AI_VEHICLES: MoverProps[] = [
-  { radius: 12.5, speed:  0.26, startAngle: 0.00, color: '#00D4FF' },
-  { radius: 12.5, speed:  0.26, startAngle: 3.14, color: '#A855F7' },
-  { radius: 16.0, speed: -0.18, startAngle: 1.05, color: '#00FF88' },
-  { radius: 16.0, speed: -0.18, startAngle: 4.20, color: '#F472B6' },
-  { radius:  9.5, speed:  0.32, startAngle: 2.10, color: '#00D4FF' },
-  { radius:  9.5, speed:  0.32, startAngle: 5.00, color: '#A855F7' },
-  { radius: 20.0, speed:  0.14, startAngle: 0.80, color: '#00FF88' },
-  { radius: 20.0, speed:  0.14, startAngle: 3.90, color: '#3B82F6' },
-  { radius: 13.5, speed: -0.22, startAngle: 1.60, color: '#FBBF24' },
+  { radius: 12.5, speed:  0.26, startAngle: 0.00, color: '#CAFF00' },
+  { radius: 12.5, speed:  0.26, startAngle: 3.14, color: '#FF0090' },
+  { radius: 16.0, speed: -0.18, startAngle: 1.05, color: '#CAFF00' },
+  { radius: 16.0, speed: -0.18, startAngle: 4.20, color: '#FF0090' },
+  { radius:  9.5, speed:  0.32, startAngle: 2.10, color: '#CAFF00' },
+  { radius:  9.5, speed:  0.32, startAngle: 5.00, color: '#FF0090' },
+  { radius: 20.0, speed:  0.14, startAngle: 0.80, color: '#CAFF00' },
+  { radius: 20.0, speed:  0.14, startAngle: 3.90, color: '#FF0090' },
+  { radius: 13.5, speed: -0.22, startAngle: 1.60, color: '#CAFF00' },
 ];
 
 const ROBOTS: Array<{ radius: number; speed: number; startAngle: number }> = [
@@ -281,14 +281,14 @@ const ROBOTS: Array<{ radius: number; speed: number; startAngle: number }> = [
 ];
 
 const DRONES: Array<{ orbitRadius: number; orbitHeight: number; speed: number; startAngle: number; color: string }> = [
-  { orbitRadius: 8,  orbitHeight: 6.5,  speed:  0.35, startAngle: 0.00, color: '#00D4FF' },
-  { orbitRadius: 12, orbitHeight: 9.0,  speed: -0.28, startAngle: 2.10, color: '#A855F7' },
-  { orbitRadius: 5,  orbitHeight: 4.5,  speed:  0.50, startAngle: 4.20, color: '#00FF88' },
-  { orbitRadius: 18, orbitHeight: 12.0, speed:  0.20, startAngle: 1.05, color: '#F472B6' },
-  { orbitRadius: 15, orbitHeight: 7.0,  speed: -0.32, startAngle: 3.14, color: '#FBBF24' },
-  { orbitRadius: 10, orbitHeight: 15.0, speed:  0.22, startAngle: 5.00, color: '#00D4FF' },
-  { orbitRadius: 6,  orbitHeight: 5.5,  speed: -0.45, startAngle: 1.50, color: '#A855F7' },
-  { orbitRadius: 22, orbitHeight: 10.0, speed:  0.16, startAngle: 2.80, color: '#00FF88' },
+  { orbitRadius: 8,  orbitHeight: 6.5,  speed:  0.35, startAngle: 0.00, color: '#CAFF00' },
+  { orbitRadius: 12, orbitHeight: 9.0,  speed: -0.28, startAngle: 2.10, color: '#FF0090' },
+  { orbitRadius: 5,  orbitHeight: 4.5,  speed:  0.50, startAngle: 4.20, color: '#CAFF00' },
+  { orbitRadius: 18, orbitHeight: 12.0, speed:  0.20, startAngle: 1.05, color: '#FF0090' },
+  { orbitRadius: 15, orbitHeight: 7.0,  speed: -0.32, startAngle: 3.14, color: '#CAFF00' },
+  { orbitRadius: 10, orbitHeight: 15.0, speed:  0.22, startAngle: 5.00, color: '#FF0090' },
+  { orbitRadius: 6,  orbitHeight: 5.5,  speed: -0.45, startAngle: 1.50, color: '#CAFF00' },
+  { orbitRadius: 22, orbitHeight: 10.0, speed:  0.16, startAngle: 2.80, color: '#FF0090' },
 ];
 
 const DELIVERY_BOTS = [
