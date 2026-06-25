@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, lazy, Suspense, useRef } from 'react';
 import { useGitHubCity } from './hooks/useGitHubCity';
 import type { BuildingData } from './types/github';
-import CityScene from './components/city/CityScene';
+import CityScene, { type ScreenshotRef } from './components/city/CityScene';
 import TopBar from './components/ui/TopBar';
 import BottomSheet from './components/ui/BottomSheet';
 import StatsOverlay from './components/ui/StatsOverlay';
@@ -65,6 +65,8 @@ export default function App() {
   const [showSkyline, setShowSkyline] = useState(true);
   const [showNeighbors, setShowNeighbors] = useState(false);
   const [selectedBuilding, setSelectedBuilding] = useState<BuildingData | null>(null);
+  const [downloading, setDownloading] = useState(false);
+  const screenshotRef = useRef<ScreenshotRef | null>(null);
   const [showLeaderboard, setShowLeaderboard] = useState(
     getRelativePath() === '/top'
   );
@@ -76,6 +78,110 @@ export default function App() {
 
   const hasCity = cityData !== null && loading.step === 'done';
   const skyColor = MARS_PALETTE.skyDay;
+
+  // Download city as composited PNG
+  const handleDownload = useCallback(async () => {
+    if (downloading || !screenshotRef.current) return;
+    setDownloading(true);
+    try {
+      const sceneDataUrl = screenshotRef.current.capture();
+      if (!sceneDataUrl) { setDownloading(false); return; }
+
+      const sceneImg = await new Promise<HTMLImageElement>((res, rej) => {
+        const img = new Image();
+        img.onload = () => res(img);
+        img.onerror = rej;
+        img.src = sceneDataUrl;
+      });
+
+      const W = sceneImg.width, H = sceneImg.height;
+      const cvs = document.createElement('canvas');
+      cvs.width = W; cvs.height = H;
+      const ctx = cvs.getContext('2d')!;
+
+      // Draw 3D scene
+      ctx.drawImage(sceneImg, 0, 0);
+
+      // --- Overlay panel (bottom-left) ---
+      const PAD = Math.round(W * 0.022);
+      const PW  = Math.round(W * 0.30);
+      const PH  = Math.round(H * 0.18);
+      const PX  = PAD, PY = H - PAD - PH;
+      const R   = 14;
+
+      // Panel background
+      ctx.save();
+      ctx.globalAlpha = 0.82;
+      ctx.fillStyle = '#060D1F';
+      ctx.beginPath();
+      ctx.roundRect(PX, PY, PW, PH, R);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+
+      // Top accent line (lime gradient)
+      const accent = ctx.createLinearGradient(PX, 0, PX + PW, 0);
+      accent.addColorStop(0, '#CAFF00');
+      accent.addColorStop(0.5, '#00D4FF');
+      accent.addColorStop(1, '#FF0090');
+      ctx.fillStyle = accent;
+      ctx.globalAlpha = 0.85;
+      ctx.beginPath();
+      ctx.roundRect(PX, PY, PW, 3, [R, R, 0, 0]);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+      ctx.restore();
+
+      // Panel border
+      ctx.save();
+      ctx.strokeStyle = 'rgba(202,255,0,0.30)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.roundRect(PX, PY, PW, PH, R);
+      ctx.stroke();
+      ctx.restore();
+
+      // Text: username
+      const uname = lastUsername || 'city';
+      const fs = Math.round(H * 0.042);
+      ctx.save();
+      ctx.font = `700 ${fs}px "Space Grotesk", system-ui, sans-serif`;
+      ctx.fillStyle = '#CAFF00';
+      ctx.shadowColor = '#CAFF00';
+      ctx.shadowBlur = 10;
+      ctx.fillText(uname, PX + PAD * 0.8, PY + PH * 0.45);
+      ctx.restore();
+
+      // Text: stats
+      const stats = cityData?.stats;
+      const statLine = stats
+        ? `${stats.repoCount} repos · ${stats.totalCommits.toLocaleString()} commits · ★ ${stats.totalStars}`
+        : '';
+      const sfs = Math.round(H * 0.022);
+      ctx.save();
+      ctx.font = `500 ${sfs}px "Space Grotesk", system-ui, sans-serif`;
+      ctx.fillStyle = 'rgba(255,255,255,0.60)';
+      ctx.fillText(statLine, PX + PAD * 0.8, PY + PH * 0.70);
+      ctx.restore();
+
+      // Text: branding
+      const bfs = Math.round(H * 0.018);
+      ctx.save();
+      ctx.font = `600 ${bfs}px "Space Grotesk", system-ui, sans-serif`;
+      ctx.fillStyle = 'rgba(0,212,255,0.75)';
+      ctx.letterSpacing = '1px';
+      ctx.fillText('agentcity.uk', PX + PAD * 0.8, PY + PH * 0.92);
+      ctx.restore();
+
+      // Trigger download
+      const a = document.createElement('a');
+      a.href = cvs.toDataURL('image/png');
+      a.download = `agentcity-${uname}.png`;
+      a.click();
+    } catch (e) {
+      console.error('Screenshot failed', e);
+    }
+    setDownloading(false);
+  }, [downloading, lastUsername, cityData]);
 
   // Update OG / social meta tags when city loads (helps Discord, Slack, iMessage, WhatsApp)
   useMetaTags(
@@ -180,6 +286,7 @@ export default function App() {
             nightMode={false}
             showSkyline={showSkyline}
             onSelectBuilding={(b) => setSelectedBuilding(b)}
+            screenshotRef={screenshotRef}
           />
         </div>
       )}
@@ -208,6 +315,8 @@ export default function App() {
           onToggleSkyline={() => setShowSkyline(v => !v)}
           showNeighbors={showNeighbors}
           onToggleNeighbors={() => setShowNeighbors(v => !v)}
+          onDownload={handleDownload}
+          downloading={downloading}
         />
       )}
 
