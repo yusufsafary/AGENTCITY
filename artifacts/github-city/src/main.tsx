@@ -1,9 +1,11 @@
-import { createRoot, Component } from "react-dom/client";
+import { createRoot } from "react-dom/client";
+import { Component } from "react";
+import type { ReactNode } from "react";
 import App from "./App";
 import "./index.css";
 
-class ErrorBoundary extends Component<{ children: React.ReactNode }, { error: Error | null }> {
-  constructor(props: { children: React.ReactNode }) {
+class ErrorBoundary extends Component<{ children: ReactNode }, { error: Error | null }> {
+  constructor(props: { children: ReactNode }) {
     super(props);
     this.state = { error: null };
   }
