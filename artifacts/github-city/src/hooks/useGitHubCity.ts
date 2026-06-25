@@ -3,6 +3,8 @@ import type { CityData, LoadingState } from '../types/github';
 import { fetchRepos, fetchEvents, aggregateActivity, sanitizeUsername } from '../services/github';
 import { buildCityData } from '../utils/cityLayout';
 
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
+
 export function useGitHubCity() {
   const [cityData, setCityData] = useState<CityData | null>(null);
   const [loading, setLoading] = useState<LoadingState>({ step: 'idle', message: '' });
@@ -62,7 +64,7 @@ export function useGitHubCity() {
     setLoading({ step: 'idle', message: '' });
     setLastUsername('');
     setUsername('');
-    window.history.pushState({}, '', '/');
+    window.history.pushState({}, '', BASE + '/');
   }, []);
 
   return {
