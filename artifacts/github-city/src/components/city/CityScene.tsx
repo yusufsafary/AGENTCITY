@@ -14,9 +14,6 @@ const SKY_DEEP = '#060D1F';
 const SKY_FOG  = '#020408';
 const LIME = '#CAFF00';
 const PINK = '#FF0090';
-const CYAN = LIME;
-const PURPLE = PINK;
-const GREEN = LIME;
 
 interface CitySceneProps {
   cityData: CityData;
