@@ -45,10 +45,10 @@ const FOG_B = new THREE.Color('#010306');
 const DIR_A = new THREE.Color('#A0C8FF');
 const DIR_B = new THREE.Color('#6060AA');
 
-const CYAN   = '#00D4FF';
-const PURPLE = '#A855F7';
-const GREEN  = '#00FF88';
-const PINK   = '#F472B6';
+const CYAN   = '#CAFF00';
+const PURPLE = '#FF0090';
+const GREEN  = '#CAFF00';
+const PINK   = '#FF0090';
 
 /* ═══════════════════════════════════════════════
    Dynamic sky + fog
