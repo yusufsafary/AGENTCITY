@@ -17,31 +17,18 @@ function AgentCityLogoSmall({ size = 24 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ flexShrink: 0 }}>
       <defs>
-        <radialGradient id="tb-bg" cx="50%" cy="40%" r="60%">
-          <stop offset="0%" stopColor="#0A2040" />
-          <stop offset="100%" stopColor="#030810" />
-        </radialGradient>
+        <linearGradient id="tb-grad" x1="0" y1="48" x2="48" y2="0" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#CAFF00" />
+          <stop offset="100%" stopColor="#FF0090" />
+        </linearGradient>
       </defs>
-      <circle cx="24" cy="24" r="24" fill="url(#tb-bg)" />
-      <line x1="6" y1="36" x2="42" y2="36" stroke="#00D4FF" strokeOpacity="0.2" strokeWidth="0.7" />
-      <rect x="6" y="28" width="6" height="8" fill="#00D4FF" opacity="0.55" rx="0.5" />
-      <rect x="7" y="29.5" width="1.6" height="1.4" fill="#00FF88" opacity="0.9" />
-      <rect x="14" y="21" width="7" height="15" fill="#00D4FF" opacity="0.75" rx="0.5" />
-      <rect x="15.2" y="22.5" width="1.8" height="1.5" fill="#A855F7" opacity="0.9" />
-      <rect x="18" y="22.5" width="1.8" height="1.5" fill="#00D4FF" opacity="0.6" />
-      <rect x="22" y="12" width="8" height="24" fill="#00D4FF" opacity="0.90" rx="0.5" />
-      <rect x="25.5" y="9.5" width="1.5" height="3" fill="#00D4FF" opacity="0.7" rx="0.5" />
-      <circle cx="26.25" cy="9" r="1.2" fill="#00FF88" opacity="1.0" />
-      <rect x="23.2" y="14" width="2" height="1.8" fill="#A855F7" opacity="0.9" />
-      <rect x="26.2" y="14" width="2" height="1.8" fill="#00D4FF" opacity="0.6" />
-      <rect x="23.2" y="17.5" width="2" height="1.8" fill="#00D4FF" opacity="0.7" />
-      <rect x="26.2" y="17.5" width="2" height="1.8" fill="#00FF88" opacity="0.9" />
-      <rect x="31" y="18" width="7" height="18" fill="#00D4FF" opacity="0.70" rx="0.5" />
-      <rect x="32.2" y="19.5" width="1.8" height="1.5" fill="#A855F7" opacity="0.8" />
-      <rect x="39" y="26" width="5" height="10" fill="#00D4FF" opacity="0.55" rx="0.5" />
-      <circle cx="10" cy="18" r="1.5" fill="#00D4FF" opacity="0.6" />
-      <line x1="8" y1="18" x2="12" y2="18" stroke="#00D4FF" strokeOpacity="0.4" strokeWidth="0.8" />
-      <line x1="10" y1="16" x2="10" y2="20" stroke="#00D4FF" strokeOpacity="0.4" strokeWidth="0.8" />
+      <path
+        d="M2,42 L2,32 L7,32 L7,26 L11,26 L11,32 L16,32 L16,14 L19,14 L19,9 L24,9 L24,14 L29,14 L29,22 L33,22 L33,26 L37,26 L37,30 L41,30 L41,22 L46,22 L46,42 Z"
+        fill="url(#tb-grad)"
+      />
+      <rect x="22.5" y="5" width="3" height="5" fill="#FF0090" rx="1" />
+      <circle cx="24" cy="4" r="3" fill="#CAFF00" />
+      <circle cx="24" cy="4" r="1.5" fill="#FF0090" />
     </svg>
   );
 }
@@ -81,8 +68,8 @@ export default function TopBar({
     setTimeout(() => setCopied(false), 2200);
   };
 
-  const panelBg = nightMode ? 'bg-[#0D0828]/80 border-white/12' : 'bg-[#04080F]/75 border-white/12';
-  const btnColor = '#00D4FF';
+  const panelBg = nightMode ? 'bg-[#0D0828]/80 border-white/12' : 'bg-[#04080F]/80 border-white/10';
+  const btnColor = '#CAFF00';
 
   if (collapsed && hasCity) {
     return (
@@ -116,11 +103,11 @@ export default function TopBar({
                 <Home size={13} />
               </button>
             )}
-            <button onClick={onShowLeaderboard} title="Top Cities" className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-medium transition-colors border bg-white/8 border-white/10 text-white/60 hover:text-[#00D4FF] hover:border-white/25">
+            <button onClick={onShowLeaderboard} title="Top Cities" className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-medium transition-colors border bg-white/8 border-white/10 text-white/60 hover:text-[#CAFF00] hover:border-white/25">
               <Trophy size={13} /><span className="hidden sm:inline">Top</span>
             </button>
             {hasCity && (
-              <button onClick={handleShare} title="Copy shareable link" className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-medium transition-colors border ${copied ? 'bg-[#00D4FF]/20 border-[#00D4FF]/50 text-[#00D4FF]' : 'bg-white/8 border-white/10 text-white/60 hover:text-white/90 hover:border-white/25'}`}>
+              <button onClick={handleShare} title="Copy shareable link" className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-medium transition-colors border ${copied ? 'bg-[#CAFF00]/20 border-[#CAFF00]/50 text-[#CAFF00]' : 'bg-white/8 border-white/10 text-white/60 hover:text-white/90 hover:border-white/25'}`}>
                 {copied ? <Check size={13} /> : <Share2 size={13} />}<span className="hidden sm:inline">Share</span>
               </button>
             )}
@@ -146,7 +133,7 @@ export default function TopBar({
               type="submit"
               disabled={loading || !username.trim()}
               className="shrink-0 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 disabled:opacity-40"
-              style={{ background: loading ? 'rgba(0,212,255,0.15)' : 'rgba(0,212,255,0.85)', color: loading ? '#00D4FF' : '#000', letterSpacing: '0.02em', boxShadow: '0 0 12px rgba(0,212,255,0.3)' }}
+              style={{ background: loading ? 'rgba(202,255,0,0.15)' : '#CAFF00', color: loading ? '#CAFF00' : '#000', letterSpacing: '0.02em', boxShadow: '0 0 12px rgba(202,255,0,0.30)' }}
             >
               {loading ? '…' : 'Build City'}
             </button>
