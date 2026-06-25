@@ -183,6 +183,17 @@ export default function App() {
     setDownloading(false);
   }, [downloading, lastUsername, cityData]);
 
+  // Share city on X / Twitter with pre-filled tweet
+  const handleShare = useCallback(() => {
+    const uname = lastUsername || '';
+    const stats = cityData?.stats;
+    const repoLine = stats ? `📦 ${stats.repoCount} repos · ⚡ ${stats.totalCommits.toLocaleString()} commits · ⭐ ${stats.totalStars} stars\n\n` : '';
+    const cityUrl = `https://agentcity.uk/${uname}`;
+    const text = `Just built my GitHub city on Agent City 🏙️\n\n${repoLine}See yours at agentcity.uk\n\n#AgentCity #GitHub #OpenSource`;
+    const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(cityUrl)}`;
+    window.open(tweetUrl, '_blank', 'noopener,noreferrer,width=560,height=540');
+  }, [lastUsername, cityData]);
+
   // Update OG / social meta tags when city loads (helps Discord, Slack, iMessage, WhatsApp)
   useMetaTags(
     hasCity && lastUsername
@@ -317,6 +328,7 @@ export default function App() {
           onToggleNeighbors={() => setShowNeighbors(v => !v)}
           onDownload={handleDownload}
           downloading={downloading}
+          onShare={handleShare}
         />
       )}
 
