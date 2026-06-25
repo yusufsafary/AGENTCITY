@@ -55,8 +55,8 @@ export default function FloatingControls({
     <div style={{
       position: 'fixed', bottom: 20, right: 12, zIndex: 40,
       display: 'flex', alignItems: 'center', gap: 2,
-      background: 'rgba(28,14,6,0.84)',
-      border: '1px solid rgba(74,191,176,0.22)',
+      background: 'rgba(4,8,15,0.84)',
+      border: '1px solid rgba(202,255,0,0.18)',
       borderRadius: 16,
       backdropFilter: 'blur(12px)',
       WebkitBackdropFilter: 'blur(12px)',
@@ -68,7 +68,7 @@ export default function FloatingControls({
         onClick={onToggleNeighbors}
         icon={<Users size={15} />}
         label={showNeighbors ? 'Tutup Kota Tetangga' : 'Kota Tetangga'}
-        activeColor="#4ABFB0"
+        activeColor="rgba(202,255,0,0.25)"
       />
       <Divider />
       <IconBtn
@@ -76,7 +76,7 @@ export default function FloatingControls({
         onClick={() => onToggleForks(!showForks)}
         icon={<GitFork size={15} />}
         label={showForks ? 'Hide Forks' : 'Show Forks'}
-        activeColor="#2CA89A"
+        activeColor="rgba(255,0,144,0.25)"
       />
       <Divider />
       <IconBtn
@@ -84,7 +84,7 @@ export default function FloatingControls({
         onClick={onToggleSkyline}
         icon={<Building2 size={15} />}
         label={showSkyline ? 'Hide Skyline' : 'Show Skyline'}
-        activeColor="#B84C1F"
+        activeColor="rgba(202,255,0,0.20)"
       />
     </div>
   );
