@@ -11,10 +11,12 @@ import Traffic from './Traffic';
 import CityLife from './CityLife';
 
 const SKY_DEEP = '#060D1F';
-const SKY_FOG  = '#04080F';
-const CYAN = '#00D4FF';
-const PURPLE = '#A855F7';
-const GREEN = '#00FF88';
+const SKY_FOG  = '#020408';
+const LIME = '#CAFF00';
+const PINK = '#FF0090';
+const CYAN = LIME;
+const PURPLE = PINK;
+const GREEN = LIME;
 
 interface CitySceneProps {
   cityData: CityData;
@@ -44,13 +46,15 @@ function SceneLighting({ nightMode }: { nightMode: boolean }) {
       <directionalLight position={[-25, 20, -20]} intensity={0.20} color="#7040CC" />
       <directionalLight position={[0, -8, -30]} intensity={0.10} color="#0080FF" />
 
-      {/* Ambient AI city glow — always on */}
-      <pointLight position={[0, 18, 0]}   intensity={1.2}  color={CYAN}   />
-      <pointLight position={[25,  8,  0]} intensity={0.8}  color={PURPLE} />
-      <pointLight position={[-25, 8,  0]} intensity={0.7}  color={CYAN}   />
-      <pointLight position={[0,   4, 25]} intensity={0.6}  color={GREEN}  />
-      <pointLight position={[0,   4,-25]} intensity={0.6}  color={PURPLE} />
-      <pointLight position={[0,   2,  0]} intensity={0.4}  color={CYAN}   />
+      {/* Lime/pink city glow — always on */}
+      <pointLight position={[0, 22, 0]}   intensity={2.2}  color={LIME}   />
+      <pointLight position={[30,  10, 0]} intensity={1.6}  color={PINK}   />
+      <pointLight position={[-30, 10, 0]} intensity={1.4}  color={LIME}   />
+      <pointLight position={[0,   5, 30]} intensity={1.2}  color={PINK}   />
+      <pointLight position={[0,   5,-30]} intensity={1.2}  color={LIME}   />
+      <pointLight position={[0,   3,  0]} intensity={0.8}  color={LIME}   />
+      <pointLight position={[15, 2, 15]}  intensity={0.6}  color={PINK}   />
+      <pointLight position={[-15,2,-15]}  intensity={0.6}  color={LIME}   />
     </>
   );
 }
@@ -69,19 +73,21 @@ function SkyBackground() {
   return null;
 }
 
-/* ── Animated data-stream particles across the sky ─────── */
+/* ── Matrix-rain data streaks across the sky ───────────── */
 function SkyDataStreams() {
-  const COUNT = 60;
+  const COUNT = 90;
   const meshRefs = useRef<(THREE.Mesh | null)[]>([]);
   const defs = useRef(Array.from({ length: COUNT }, (_, i) => {
     const s = Math.sin(i * 2.3);
     const c = Math.cos(i * 3.7);
     return {
-      x: (s - 0.5) * 80,
-      z: (c - 0.5) * 80,
-      y: 15 + (s * 0.5 + 0.5) * 25,
-      speed: 0.3 + (i % 5) * 0.12,
-      col: i % 3 === 0 ? CYAN : i % 3 === 1 ? PURPLE : GREEN,
+      x:      (s - 0.5) * 110,
+      z:      (c - 0.5) * 110,
+      y:      15 + (s * 0.5 + 0.5) * 40,
+      speed:  2.5 + (i % 7) * 0.9,
+      len:    0.4 + (i % 4) * 0.35,
+      col:    i % 2 === 0 ? LIME : PINK,
+      opBase: 0.15 + (i % 5) * 0.04,
     };
   }));
 
@@ -89,8 +95,12 @@ function SkyDataStreams() {
     defs.current.forEach((d, i) => {
       const mesh = meshRefs.current[i];
       if (!mesh) return;
-      d.y -= dt * d.speed * 2;
-      if (d.y < 5) d.y = 40 + Math.random() * 15;
+      d.y -= dt * d.speed;
+      if (d.y < 2) {
+        d.y = 50 + Math.random() * 20;
+        d.x = (Math.random() - 0.5) * 110;
+        d.z = (Math.random() - 0.5) * 110;
+      }
       mesh.position.set(d.x, d.y, d.z);
     });
   });
@@ -99,11 +109,72 @@ function SkyDataStreams() {
     <>
       {defs.current.map((d, i) => (
         <mesh key={i} ref={el => { meshRefs.current[i] = el; }} position={[d.x, d.y, d.z]}>
-          <sphereGeometry args={[0.06 + (i % 3) * 0.04, 4, 4]} />
-          <meshBasicMaterial color={d.col} transparent opacity={0.35} depthWrite={false} />
+          <boxGeometry args={[0.025, d.len, 0.025]} />
+          <meshBasicMaterial color={d.col} transparent opacity={d.opBase} depthWrite={false} />
         </mesh>
       ))}
     </>
+  );
+}
+
+/* ── Ground pulse rings — concentric glow on the city floor */
+function GroundGlow() {
+  const rings = useRef<(THREE.Mesh | null)[]>([]);
+  const RADII = [4, 8, 14, 22, 32, 44];
+
+  useFrame(({ clock }) => {
+    const t = clock.getElapsedTime();
+    rings.current.forEach((mesh, i) => {
+      if (!mesh) return;
+      (mesh.material as THREE.MeshBasicMaterial).opacity =
+        0.045 + Math.sin(t * 0.55 + i * 0.9) * 0.028;
+    });
+  });
+
+  return (
+    <>
+      {RADII.map((r, i) => (
+        <mesh key={i} ref={el => { rings.current[i] = el; }}
+          position={[0, 0.012, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+          <ringGeometry args={[r - 0.14, r + 0.14, 72]} />
+          <meshBasicMaterial
+            color={i % 2 === 0 ? LIME : PINK}
+            transparent opacity={0.05}
+            depthWrite={false} side={THREE.DoubleSide} />
+        </mesh>
+      ))}
+    </>
+  );
+}
+
+/* ── Citywide scan pulse — expanding ring from center ───── */
+function CityPulseRing() {
+  const ringRef  = useRef<THREE.Mesh>(null);
+  const state    = useRef({ radius: 0, active: false, nextAt: 3.5 });
+
+  useFrame(({ clock }) => {
+    const t  = clock.getElapsedTime();
+    const ps = state.current;
+    if (!ps.active && t > ps.nextAt) { ps.active = true; ps.radius = 0.1; }
+    if (ps.active && ringRef.current) {
+      ps.radius += 0.35;
+      ringRef.current.scale.setScalar(ps.radius);
+      (ringRef.current.material as THREE.MeshBasicMaterial).opacity =
+        Math.max(0, 0.28 - ps.radius / 65);
+      if (ps.radius > 65) {
+        ps.active = false;
+        ps.nextAt = t + 4.5 + Math.random() * 3;
+      }
+    } else if (ringRef.current) {
+      (ringRef.current.material as THREE.MeshBasicMaterial).opacity = 0;
+    }
+  });
+
+  return (
+    <mesh ref={ringRef} position={[0, 0.018, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+      <ringGeometry args={[0.88, 1, 72]} />
+      <meshBasicMaterial color={LIME} transparent opacity={0} depthWrite={false} side={THREE.DoubleSide} />
+    </mesh>
   );
 }
 
@@ -161,7 +232,7 @@ export default function CityScene({ cityData, nightMode, showSkyline, onSelectBu
       style={{ background: SKY_DEEP }}
     >
       <color attach="background" args={[SKY_DEEP]} />
-      <fog attach="fog" args={[SKY_FOG, 70, 200]} />
+      <fog attach="fog" args={[SKY_FOG, 50, 150]} />
 
       <SkyBackground />
       <SceneLighting nightMode={nightMode} />
@@ -180,6 +251,8 @@ export default function CityScene({ cityData, nightMode, showSkyline, onSelectBu
         <Traffic />
         <CityLife nightMode={nightMode} />
         <SkyDataStreams />
+        <GroundGlow />
+        <CityPulseRing />
       </Suspense>
 
       <OrbitControls
@@ -187,7 +260,7 @@ export default function CityScene({ cityData, nightMode, showSkyline, onSelectBu
         enableZoom
         enableRotate
         autoRotate
-        autoRotateSpeed={0.4}
+        autoRotateSpeed={0.65}
         minDistance={8}
         maxDistance={130}
         minPolarAngle={0.1}
