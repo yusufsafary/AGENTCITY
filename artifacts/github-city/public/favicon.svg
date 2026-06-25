@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#C45020"/>
+      <stop offset="100%" stop-color="#0C0718"/>
+    </linearGradient>
+    <linearGradient id="teal" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#4ABFB0"/>
+      <stop offset="100%" stop-color="#2CA89A"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background circle -->
+  <rect width="32" height="32" rx="7" fill="url(#sky)"/>
+
+  <!-- Ground platform -->
+  <rect x="3" y="22" width="26" height="4" rx="1" fill="#1a0e06" opacity="0.7"/>
+
+  <!-- Building left small -->
+  <rect x="4" y="17" width="5" height="7" rx="0.5" fill="#8A6248"/>
+  <!-- Windows left -->
+  <rect x="5" y="18.5" width="1.2" height="1" rx="0.2" fill="#4ABFB0" opacity="0.9"/>
+  <rect x="6.8" y="18.5" width="1.2" height="1" rx="0.2" fill="#4ABFB0" opacity="0.9"/>
+  <rect x="5" y="20.2" width="1.2" height="1" rx="0.2" fill="#4ABFB0" opacity="0.6"/>
+  <rect x="6.8" y="20.2" width="1.2" height="1" rx="0.2" fill="#4ABFB0" opacity="0.6"/>
+
+  <!-- Building center tall (main tower) -->
+  <rect x="11" y="8" width="7" height="14" rx="0.5" fill="#9A7A58"/>
+  <!-- Crown -->
+  <rect x="12" y="5" width="5" height="4" rx="0.5" fill="#B08A68"/>
+  <!-- Antenna -->
+  <rect x="14.2" y="2.5" width="0.6" height="3" rx="0.3" fill="#aaaaaa"/>
+  <circle cx="14.5" cy="2.4" r="0.8" fill="#4ABFB0" opacity="0.95"/>
+  <!-- Windows center -->
+  <rect x="12" y="9.5" width="1.8" height="1.2" rx="0.2" fill="#4ABFB0" opacity="0.9"/>
+  <rect x="14.2" y="9.5" width="1.8" height="1.2" rx="0.2" fill="#4ABFB0" opacity="0.9"/>
+  <rect x="12" y="11.5" width="1.8" height="1.2" rx="0.2" fill="#4ABFB0" opacity="0.7"/>
+  <rect x="14.2" y="11.5" width="1.8" height="1.2" rx="0.2" fill="#2CA89A" opacity="0.9"/>
+  <rect x="12" y="13.5" width="1.8" height="1.2" rx="0.2" fill="#4ABFB0" opacity="0.8"/>
+  <rect x="14.2" y="13.5" width="1.8" height="1.2" rx="0.2" fill="#4ABFB0" opacity="0.6"/>
+  <rect x="12" y="15.5" width="1.8" height="1.2" rx="0.2" fill="#2CA89A" opacity="0.9"/>
+  <rect x="14.2" y="15.5" width="1.8" height="1.2" rx="0.2" fill="#4ABFB0" opacity="0.7"/>
+
+  <!-- Building right medium -->
+  <rect x="20" y="13" width="6" height="9" rx="0.5" fill="#7A6252"/>
+  <!-- Windows right -->
+  <rect x="21" y="14.5" width="1.5" height="1" rx="0.2" fill="#4ABFB0" opacity="0.9"/>
+  <rect x="23.2" y="14.5" width="1.5" height="1" rx="0.2" fill="#2CA89A" opacity="0.8"/>
+  <rect x="21" y="16.2" width="1.5" height="1" rx="0.2" fill="#4ABFB0" opacity="0.6"/>
+  <rect x="23.2" y="16.2" width="1.5" height="1" rx="0.2" fill="#4ABFB0" opacity="0.9"/>
+  <rect x="21" y="17.9" width="1.5" height="1" rx="0.2" fill="#2CA89A" opacity="0.8"/>
+  <rect x="23.2" y="17.9" width="1.5" height="1" rx="0.2" fill="#4ABFB0" opacity="0.7"/>
+
+  <!-- Ground glow -->
+  <rect x="3" y="21.5" width="26" height="1" rx="0.5" fill="#C45020" opacity="0.35"/>
+</svg>
