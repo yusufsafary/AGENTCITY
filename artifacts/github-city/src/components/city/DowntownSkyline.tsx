@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import * as THREE from 'three';
 import type { SkylineBar } from '../../types/github';
-import { NIGHT_PALETTE } from '../../utils/colors';
 
 interface DowntownSkylineProps {
   bars: SkylineBar[];
