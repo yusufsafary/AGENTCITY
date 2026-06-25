@@ -600,314 +600,207 @@ function LandingHero({ onShowLeaderboard }: { onShowLeaderboard: () => void }) {
           </div>
         </div>
       ) : (
+        /* ── Portrait mobile layout ───────────────────────────────────
+           Scrollable column so nothing gets clipped on small screens.
+           Uses flex-start + auto top-margin inner wrapper for centering. */
         <div
-          className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none"
+          className="absolute inset-0 flex flex-col items-center pointer-events-none"
           style={{
-            paddingTop: 'max(80px, calc(56px + env(safe-area-inset-top)))',
-            paddingBottom: 'max(32px, env(safe-area-inset-bottom))',
-            paddingLeft: 'env(safe-area-inset-left)',
-            paddingRight: 'env(safe-area-inset-right)',
+            overflowY: 'auto',
+            overflowX: 'hidden',
+            paddingTop: 'max(64px, calc(48px + env(safe-area-inset-top)))',
+            paddingBottom: 'max(20px, env(safe-area-inset-bottom))',
+            paddingLeft: 'max(12px, env(safe-area-inset-left))',
+            paddingRight: 'max(12px, env(safe-area-inset-right))',
             zIndex: 10,
+            WebkitOverflowScrolling: 'touch',
           }}
         >
-          {/* Logo with orbital rings + beacon pulses */}
-          <div className="gc-float gc-fade-up-1 mb-4 pointer-events-auto relative" style={{ width: 100, height: 100 }}>
-            {/* Beacon pulse rings */}
-            {[0, 1, 2].map(i => (
-              <div
-                key={i}
-                className="absolute rounded-full pointer-events-none"
-                style={{
-                  inset: '50%',
-                  width: 20, height: 20,
-                  marginLeft: -10, marginTop: -10,
-                  border: '1.5px solid #CAFF00',
-                  animation: `gc-beacon-ring 2.4s ease-out ${i * 0.8}s infinite`,
-                }}
-              />
-            ))}
-            {/* Orbital ring 1 (cyan, slow CW) */}
-            <div
-              className="absolute rounded-full pointer-events-none"
-              style={{
-                inset: 4,
-                border: '1px solid transparent',
-                borderTopColor: '#00D4FF',
-                borderRightColor: 'rgba(0,212,255,0.3)',
-                animation: 'gc-orbit-cw 6s linear infinite',
-              }}
-            />
-            {/* Orbital ring 2 (pink, faster CCW, tilted) */}
-            <div
-              className="absolute rounded-full pointer-events-none"
-              style={{
-                inset: 10,
-                border: '1px solid transparent',
-                borderBottomColor: '#FF0090',
-                borderLeftColor: 'rgba(255,0,144,0.3)',
-                animation: 'gc-orbit-ccw 4s linear infinite',
-                transform: 'rotateX(60deg)',
-              }}
-            />
-            {/* Orbital dot on ring 1 */}
-            <div
-              className="absolute pointer-events-none"
-              style={{
-                top: 4, left: '50%', marginLeft: -3,
-                width: 6, height: 6, borderRadius: '50%',
-                background: '#00D4FF',
-                boxShadow: '0 0 8px #00D4FF',
-                transformOrigin: '3px calc(50% - 4px)',
-                animation: 'gc-orbit-cw 6s linear infinite',
-              }}
-            />
-            {/* Logo centered */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <AgentCityLogo size={72} />
-            </div>
-          </div>
+          {/* Inner wrapper — centers on tall screens, scrolls on small ones */}
+          <div className="flex flex-col items-center w-full my-auto">
 
-          {/* Glitch title */}
-          <div className="gc-fade-up-2 text-center">
-            <div className="relative inline-block">
-              <h1
-                className="text-[2.2rem] font-bold leading-tight gc-hologram"
-                style={{ letterSpacing: '-0.03em', color: '#CAFF00', textShadow: '0 0 30px #CAFF0055, 0 0 60px #CAFF0022, 0 2px 16px rgba(0,0,0,0.7)' }}
-              >
-                Agent City
-              </h1>
-              {/* Glitch layers */}
-              <h1
-                aria-hidden="true"
-                className="gc-glitch-1 text-[2.2rem] font-bold leading-tight"
-                style={{ letterSpacing: '-0.03em', color: '#00D4FF', position: 'absolute', inset: 0, pointerEvents: 'none' }}
-              >
-                Agent City
-              </h1>
-              <h1
-                aria-hidden="true"
-                className="gc-glitch-2 text-[2.2rem] font-bold leading-tight"
-                style={{ letterSpacing: '-0.03em', color: '#FF0090', position: 'absolute', inset: 0, pointerEvents: 'none' }}
-              >
-                Agent City
-              </h1>
-            </div>
-            {/* Animated gradient separator */}
+            {/* ── Logo ── */}
             <div
-              className="mx-auto mt-2 h-[2px] w-20 rounded-full"
-              style={{
+              className="gc-float gc-fade-up-1 pointer-events-auto relative mb-3"
+              style={{ width: 80, height: 80, flexShrink: 0 }}
+            >
+              {[0, 1].map(i => (
+                <div key={i} className="absolute rounded-full pointer-events-none" style={{
+                  inset: '50%', width: 16, height: 16, marginLeft: -8, marginTop: -8,
+                  border: '1.5px solid #CAFF00',
+                  animation: `gc-beacon-ring 2.4s ease-out ${i * 0.9}s infinite`,
+                }} />
+              ))}
+              <div className="absolute rounded-full pointer-events-none" style={{
+                inset: 3, border: '1px solid transparent',
+                borderTopColor: '#00D4FF', borderRightColor: 'rgba(0,212,255,0.3)',
+                animation: 'gc-orbit-cw 6s linear infinite',
+              }} />
+              <div className="absolute pointer-events-none" style={{
+                top: 3, left: '50%', marginLeft: -2.5,
+                width: 5, height: 5, borderRadius: '50%',
+                background: '#00D4FF', boxShadow: '0 0 6px #00D4FF',
+                transformOrigin: '2.5px calc(50% - 3px)',
+                animation: 'gc-orbit-cw 6s linear infinite',
+              }} />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <AgentCityLogo size={58} />
+              </div>
+            </div>
+
+            {/* ── Title ── */}
+            <div className="gc-fade-up-2 text-center">
+              <div className="relative inline-block">
+                <h1 className="text-[1.95rem] font-bold leading-tight gc-hologram"
+                  style={{ letterSpacing: '-0.03em', color: '#CAFF00', textShadow: '0 0 28px #CAFF0055, 0 2px 14px rgba(0,0,0,0.7)' }}>
+                  Agent City
+                </h1>
+                <h1 aria-hidden="true" className="gc-glitch-1 text-[1.95rem] font-bold leading-tight"
+                  style={{ letterSpacing: '-0.03em', color: '#00D4FF', position: 'absolute', inset: 0, pointerEvents: 'none' }}>
+                  Agent City
+                </h1>
+                <h1 aria-hidden="true" className="gc-glitch-2 text-[1.95rem] font-bold leading-tight"
+                  style={{ letterSpacing: '-0.03em', color: '#FF0090', position: 'absolute', inset: 0, pointerEvents: 'none' }}>
+                  Agent City
+                </h1>
+              </div>
+              <div className="mx-auto mt-1.5 h-[2px] w-16 rounded-full" style={{
                 background: 'linear-gradient(90deg, transparent, #CAFF00, #00D4FF, #FF0090, transparent)',
                 backgroundSize: '200% 100%',
                 animation: 'gc-border-chase 2s linear infinite',
-              }}
-            />
-          </div>
+              }} />
+            </div>
 
-          {/* Subtitle with typewriter cursor */}
-          <p
-            className="gc-fade-up-3 mt-3 text-white/75 text-[0.88rem] leading-relaxed font-light text-center"
-            style={{ textShadow: '0 1px 8px rgba(0,0,0,0.7)', maxWidth: '220px' }}
-          >
-            A futuristic metropolis<br />inhabited by AI agents —<br />built from your GitHub activity
-            <span className="gc-cursor ml-0.5 font-bold text-[#00D4FF]">|</span>
-          </p>
+            {/* ── Subtitle ── */}
+            <p className="gc-fade-up-3 mt-2 text-white/70 text-[0.82rem] leading-snug font-light text-center"
+              style={{ textShadow: '0 1px 8px rgba(0,0,0,0.7)', maxWidth: 210 }}>
+              A futuristic metropolis inhabited by AI agents —{' '}
+              <span className="text-white/55">built from your GitHub</span>
+              <span className="gc-cursor ml-0.5 font-bold text-[#00D4FF]">|</span>
+            </p>
 
-          {/* Live status */}
-          <div className="gc-fade-up-3 mt-3 pointer-events-auto" style={{ animationDelay: '0.5s' }}>
-            <LiveStatus />
-          </div>
+            {/* ── Live status ── */}
+            <div className="gc-fade-up-3 mt-2 pointer-events-auto" style={{ animationDelay: '0.4s' }}>
+              <LiveStatus />
+            </div>
 
-          {/* Expanded agent badges with spawn animation */}
-          <div
-            className="mt-3 flex flex-wrap items-center justify-center gap-1.5"
-            style={{ maxWidth: 280, animation: 'gc-fade-up 0.6s ease-out 0.45s both' }}
-          >
-            {[
-              { label: '🤖 Builder',   color: '#CAFF00', bg: 'rgba(202,255,0,0.10)',   border: 'rgba(202,255,0,0.28)' },
-              { label: '🧠 Thinker',   color: '#FF0090', bg: 'rgba(255,0,144,0.12)',  border: 'rgba(255,0,144,0.30)' },
-              { label: '⚡ Executor',  color: '#00D4FF', bg: 'rgba(0,212,255,0.10)',  border: 'rgba(0,212,255,0.28)' },
-              { label: '🔍 Analyst',   color: '#CAFF00', bg: 'rgba(202,255,0,0.08)',   border: 'rgba(202,255,0,0.22)' },
-              { label: '🛡 Guardian',  color: '#FF0090', bg: 'rgba(255,0,144,0.08)',  border: 'rgba(255,0,144,0.22)' },
-              { label: '🌐 Networker', color: '#00D4FF', bg: 'rgba(0,212,255,0.08)',  border: 'rgba(0,212,255,0.22)' },
-            ].map(({ label, color, bg, border }, i) => (
-              <span
-                key={i}
-                className="text-[9px] font-semibold px-2 py-0.5 rounded-full"
-                style={{
-                  background: bg, border: `1px solid ${border}`, color,
-                  letterSpacing: '0.04em',
-                  animation: `gc-agent-spawn 0.5s ease-out ${0.6 + i * 0.12}s both`,
-                  boxShadow: `0 0 8px ${color}22`,
-                }}
-              >
-                {label}
-              </span>
-            ))}
-          </div>
+            {/* ── Agent badges (3 only — compact row) ── */}
+            <div className="mt-2 flex items-center justify-center gap-1.5"
+              style={{ animation: 'gc-fade-up 0.6s ease-out 0.42s both' }}>
+              {[
+                { label: '🤖 Builder',  color: '#CAFF00', bg: 'rgba(202,255,0,0.10)',  border: 'rgba(202,255,0,0.28)' },
+                { label: '⚡ Executor', color: '#00D4FF', bg: 'rgba(0,212,255,0.10)',  border: 'rgba(0,212,255,0.28)' },
+                { label: '🧠 Thinker',  color: '#FF0090', bg: 'rgba(255,0,144,0.12)', border: 'rgba(255,0,144,0.30)' },
+              ].map(({ label, color, bg, border }, i) => (
+                <span key={i} className="text-[9px] font-semibold px-2 py-0.5 rounded-full whitespace-nowrap"
+                  style={{ background: bg, border: `1px solid ${border}`, color, letterSpacing: '0.04em',
+                    animation: `gc-agent-spawn 0.5s ease-out ${0.55 + i * 0.1}s both`,
+                    boxShadow: `0 0 6px ${color}22` }}>
+                  {label}
+                </span>
+              ))}
+            </div>
 
-          <button
-            onClick={onShowLeaderboard}
-            className="pointer-events-auto mt-5 flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 gc-neon-border"
-            style={{
-              background: '#CAFF00',
-              color: '#000',
-              boxShadow: '0 0 24px rgba(202,255,0,0.45), 0 0 48px rgba(202,255,0,0.15)',
-              animation: 'gc-fade-up 0.6s ease-out 0.55s both',
-            }}
-          >
-            <span className="text-base leading-none">🏆</span>
-            <span>View Top Cities</span>
-          </button>
-
-          <div
-            className="pointer-events-auto flex items-center gap-2 mt-3"
-            style={{ animation: 'gc-fade-up 0.6s ease-out 0.70s both' }}
-          >
+            {/* ── CTA button ── */}
             <button
-              onClick={() => setShowHowTo(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-white/50 hover:text-white/85 transition-colors"
-              style={{ background: 'rgba(202,255,0,0.08)', border: '1px solid rgba(202,255,0,0.18)' }}
-            >
-              <span className="text-[11px] leading-none">❓</span>
-              How to use
-            </button>
-            <span className="text-white/20 text-xs select-none">·</span>
-            <button
-              onClick={() => setShowAbout(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-white/50 hover:text-white/85 transition-colors"
-              style={{ background: 'rgba(255,0,144,0.08)', border: '1px solid rgba(255,0,144,0.18)' }}
-            >
-              <span className="text-[11px] leading-none">ℹ️</span>
-              About
-            </button>
-          </div>
-
-          {/* Builder X card + EasyA launchpad — side by side */}
-          <div
-            className="pointer-events-auto flex items-stretch gap-2 mt-3"
-            style={{ animation: 'gc-fade-up 0.6s ease-out 0.78s both' }}
-          >
-            {/* X / Twitter card */}
-            <a
-              href="https://x.com/jackie_doll96"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2.5 px-3 py-2.5 rounded-2xl no-underline group"
+              onClick={onShowLeaderboard}
+              className="pointer-events-auto mt-4 flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold transition-all duration-200"
               style={{
-                background: 'rgba(4,8,15,0.72)',
-                border: '1px solid rgba(255,255,255,0.10)',
-                backdropFilter: 'blur(12px)',
-                WebkitBackdropFilter: 'blur(12px)',
-                boxShadow: '0 2px 16px rgba(0,0,0,0.30)',
-                transition: 'border-color 0.18s ease, box-shadow 0.18s ease',
-                minWidth: 0,
-              }}
-              onMouseEnter={e => {
-                (e.currentTarget as HTMLAnchorElement).style.borderColor = 'rgba(255,255,255,0.24)';
-                (e.currentTarget as HTMLAnchorElement).style.boxShadow = '0 4px 20px rgba(0,0,0,0.45)';
-              }}
-              onMouseLeave={e => {
-                (e.currentTarget as HTMLAnchorElement).style.borderColor = 'rgba(255,255,255,0.10)';
-                (e.currentTarget as HTMLAnchorElement).style.boxShadow = '0 2px 16px rgba(0,0,0,0.30)';
+                background: '#CAFF00', color: '#000',
+                boxShadow: '0 0 20px rgba(202,255,0,0.45), 0 0 40px rgba(202,255,0,0.12)',
+                animation: 'gc-fade-up 0.6s ease-out 0.52s both',
               }}
             >
-              {/* Real profile photo */}
-              <img
-                src="https://unavatar.io/twitter/jackie_doll96"
-                alt="@jackie_doll96"
-                className="shrink-0 w-8 h-8 rounded-full object-cover"
-                style={{ border: '1.5px solid rgba(74,191,176,0.35)' }}
-                onError={e => {
-                  const t = e.currentTarget;
-                  t.style.display = 'none';
-                  (t.nextSibling as HTMLElement | null)?.removeAttribute('hidden');
-                }}
-              />
-              {/* Fallback initial (hidden by default) */}
-              <div
-                hidden
-                className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold"
-                style={{ background: 'linear-gradient(135deg, #4ABFB0, #2CA89A)' }}
-              >J</div>
-              {/* Text */}
-              <div className="min-w-0">
-                <p className="text-white/40 text-[9px] leading-none mb-0.5 uppercase tracking-wider">Built by</p>
-                <p className="text-white/90 text-[11px] font-semibold leading-tight">@jackie_doll96</p>
-              </div>
-              {/* X logo */}
-              <div className="shrink-0 text-white/30 group-hover:text-white/65 transition-colors ml-0.5">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
+              <span className="text-base leading-none">🏆</span>
+              <span>View Top Cities</span>
+            </button>
+
+            {/* ── How to use · About ── */}
+            <div className="pointer-events-auto flex items-center gap-2 mt-2.5"
+              style={{ animation: 'gc-fade-up 0.6s ease-out 0.64s both' }}>
+              <button onClick={() => setShowHowTo(true)}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-white/50 transition-colors active:text-white/90"
+                style={{ background: 'rgba(202,255,0,0.08)', border: '1px solid rgba(202,255,0,0.18)' }}>
+                <span className="text-[11px] leading-none">❓</span>How to use
+              </button>
+              <span className="text-white/20 text-xs select-none">·</span>
+              <button onClick={() => setShowAbout(true)}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-white/50 transition-colors active:text-white/90"
+                style={{ background: 'rgba(255,0,144,0.08)', border: '1px solid rgba(255,0,144,0.18)' }}>
+                <span className="text-[11px] leading-none">ℹ️</span>About
+              </button>
+            </div>
+
+            {/* ── Builder X card + EasyA — side by side, full-width bounded ── */}
+            <div className="pointer-events-auto flex items-stretch gap-0 mt-3 rounded-2xl overflow-hidden w-full"
+              style={{
+                maxWidth: 300,
+                background: 'rgba(4,8,15,0.75)',
+                border: '1px solid rgba(255,255,255,0.10)',
+                backdropFilter: 'blur(14px)',
+                WebkitBackdropFilter: 'blur(14px)',
+                boxShadow: '0 4px 20px rgba(0,0,0,0.35)',
+                animation: 'gc-fade-up 0.6s ease-out 0.74s both',
+              }}>
+
+              {/* X / Twitter side */}
+              <a href="https://x.com/jackie_doll96" target="_blank" rel="noopener noreferrer"
+                className="flex items-center gap-2.5 px-3 py-3 no-underline flex-1 min-w-0 group transition-colors"
+                style={{ borderRight: '1px solid rgba(255,255,255,0.07)' }}>
+                <img
+                  src="https://unavatar.io/twitter/jackie_doll96"
+                  alt="@jackie_doll96"
+                  className="shrink-0 w-9 h-9 rounded-full object-cover"
+                  style={{ border: '1.5px solid rgba(74,191,176,0.40)' }}
+                  onError={e => {
+                    const t = e.currentTarget;
+                    t.style.display = 'none';
+                    (t.nextSibling as HTMLElement | null)?.removeAttribute('hidden');
+                  }}
+                />
+                <div hidden className="shrink-0 w-9 h-9 rounded-full flex items-center justify-center text-white font-bold text-sm"
+                  style={{ background: 'linear-gradient(135deg, #4ABFB0, #2CA89A)' }}>J</div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-white/40 text-[9px] uppercase tracking-wider leading-none mb-0.5">Built by</p>
+                  <p className="text-white/90 text-[11px] font-semibold leading-tight truncate">@jackie_doll96</p>
+                </div>
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"
+                  className="shrink-0 text-white/25 group-hover:text-white/60 transition-colors ml-0.5">
                   <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.254 5.622 5.91-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                 </svg>
-              </div>
-            </a>
+              </a>
 
-            {/* Divider */}
-            <div style={{ width: 1, background: 'rgba(255,255,255,0.08)', borderRadius: 1, flexShrink: 0 }} />
-
-            {/* EasyA launchpad card */}
-            <a
-              href="https://www.easya.io"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex flex-col items-center justify-center gap-1 px-3 py-2.5 rounded-2xl no-underline group"
-              style={{
-                background: 'rgba(4,8,15,0.72)',
-                border: '1px solid rgba(74,222,128,0.15)',
-                backdropFilter: 'blur(12px)',
-                WebkitBackdropFilter: 'blur(12px)',
-                boxShadow: '0 2px 16px rgba(0,0,0,0.30)',
-                transition: 'border-color 0.18s ease, box-shadow 0.18s ease',
-                minWidth: 80,
-              }}
-              onMouseEnter={e => {
-                (e.currentTarget as HTMLAnchorElement).style.borderColor = 'rgba(74,222,128,0.38)';
-                (e.currentTarget as HTMLAnchorElement).style.boxShadow = '0 4px 20px rgba(74,222,128,0.12)';
-              }}
-              onMouseLeave={e => {
-                (e.currentTarget as HTMLAnchorElement).style.borderColor = 'rgba(74,222,128,0.15)';
-                (e.currentTarget as HTMLAnchorElement).style.boxShadow = '0 2px 16px rgba(0,0,0,0.30)';
-              }}
-            >
-              {/* EasyA no-bg logo */}
-              <img
-                src="/easya-nobg.png"
-                alt="EasyA"
-                style={{ width: 28, height: 28, objectFit: 'contain', filter: 'drop-shadow(0 0 6px rgba(74,222,128,0.40))' }}
-              />
-              <div className="text-center">
-                <p className="text-white/40 text-[9px] uppercase tracking-wider leading-none">Launch on</p>
-                <p
-                  className="text-[10px] font-bold leading-tight"
-                  style={{ color: '#4ade80' }}
-                >EasyA</p>
-              </div>
-              {/* AGC token badge */}
-              <span
-                className="text-[8px] font-semibold px-1.5 py-0.5 rounded-full"
-                style={{ background: 'rgba(74,222,128,0.12)', border: '1px solid rgba(74,222,128,0.25)', color: '#4ade80', letterSpacing: '0.05em' }}
-              >
-                $AGC
-              </span>
-            </a>
-          </div>
-
-          {/* Powered by GitHub + legal footer */}
-          <div
-            className="pointer-events-auto flex flex-col items-center gap-1.5 mt-4"
-            style={{ animation: 'gc-fade-up 0.6s ease-out 0.85s both' }}
-          >
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full"
-              style={{ background: 'rgba(0,20,40,0.40)', border: '1px solid rgba(255,255,255,0.08)' }}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" className="text-white/60">
-                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-              </svg>
-              <span className="text-[11px] font-medium text-white/55" style={{ letterSpacing: '0.06em' }}>
-                POWERED BY GITHUB
-              </span>
+              {/* EasyA side */}
+              <a href="https://www.easya.io" target="_blank" rel="noopener noreferrer"
+                className="flex flex-col items-center justify-center gap-0.5 px-3 py-3 no-underline group transition-all"
+                style={{ minWidth: 82 }}>
+                <img src="/easya-nobg.png" alt="EasyA"
+                  style={{ width: 26, height: 26, objectFit: 'contain',
+                    filter: 'drop-shadow(0 0 5px rgba(74,222,128,0.45))' }} />
+                <p className="text-white/35 text-[8.5px] uppercase tracking-wider leading-none mt-0.5">Launch on</p>
+                <p className="text-[10px] font-bold leading-tight" style={{ color: '#4ade80' }}>EasyA</p>
+                <span className="text-[8px] font-semibold px-1.5 py-0.5 rounded-full mt-0.5"
+                  style={{ background: 'rgba(74,222,128,0.12)', border: '1px solid rgba(74,222,128,0.28)',
+                    color: '#4ade80', letterSpacing: '0.04em' }}>$AGC</span>
+              </a>
             </div>
-            <LegalFooterLinks />
-          </div>
+
+            {/* ── Powered by GitHub + legal ── */}
+            <div className="pointer-events-auto flex flex-col items-center gap-1.5 mt-3 mb-1"
+              style={{ animation: 'gc-fade-up 0.6s ease-out 0.84s both' }}>
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full"
+                style={{ background: 'rgba(0,20,40,0.40)', border: '1px solid rgba(255,255,255,0.07)' }}>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" className="text-white/55">
+                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+                <span className="text-[10px] font-medium text-white/50" style={{ letterSpacing: '0.06em' }}>
+                  POWERED BY GITHUB
+                </span>
+              </div>
+              <LegalFooterLinks />
+            </div>
+
+          </div>{/* /inner wrapper */}
         </div>
       )}
 
