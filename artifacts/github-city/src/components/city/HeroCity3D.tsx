@@ -45,10 +45,12 @@ const FOG_B = new THREE.Color('#010306');
 const DIR_A = new THREE.Color('#A0C8FF');
 const DIR_B = new THREE.Color('#6060AA');
 
-const CYAN   = '#CAFF00';
-const PURPLE = '#FF0090';
-const GREEN  = '#CAFF00';
-const PINK   = '#FF0090';
+const CYAN   = '#00D4FF';   // electric cyan
+const PURPLE = '#9D00FF';   // electric violet
+const GREEN  = '#00FF94';   // matrix green
+const PINK   = '#FF0090';   // hot magenta
+const GOLD   = '#FFB700';   // AI gold
+const ORANGE = '#FF6B00';   // plasma orange
 
 /* ═══════════════════════════════════════════════
    Dynamic sky + fog
@@ -461,11 +463,11 @@ function DataGrid() {
    Building system — AI/Cyberpunk themed
 ═══════════════════════════════════════════════ */
 const MATS = {
-  glass:    { body: '#0D1E30', metal: 0.85, rough: 0.08, win: CYAN,   winB: '#0099BB' },
-  classic:  { body: '#0A1828', metal: 0.7,  rough: 0.20, win: PURPLE, winB: '#7030C0' },
-  concrete: { body: '#0C1820', metal: 0.5,  rough: 0.40, win: GREEN,  winB: '#00BB66' },
-  warm:     { body: '#0E1A2A', metal: 0.8,  rough: 0.12, win: PINK,   winB: '#C040A0' },
-  dark:     { body: '#08121C', metal: 0.92, rough: 0.06, win: CYAN,   winB: PURPLE },
+  glass:    { body: '#040E22', metal: 0.92, rough: 0.04, win: CYAN,   winB: '#0AF0FF' },
+  classic:  { body: '#0A041E', metal: 0.82, rough: 0.12, win: PURPLE, winB: '#CC44FF' },
+  concrete: { body: '#031410', metal: 0.60, rough: 0.30, win: GREEN,  winB: '#44FFAA' },
+  warm:     { body: '#180410', metal: 0.88, rough: 0.08, win: PINK,   winB: '#FF44CC' },
+  dark:     { body: '#020612', metal: 0.96, rough: 0.03, win: GOLD,   winB: ORANGE },
 } as const;
 type MatKey = keyof typeof MATS;
 
@@ -647,6 +649,12 @@ const NEON_DEFS = [
   { x:  0.00, y: 4.62, z: -0.55, color: GREEN,  w: 0.44, h: 0.09 },
   { x:  1.90, y: 3.72, z: -0.53, color: CYAN,   w: 0.34, h: 0.07 },
   { x: -1.80, y: 3.06, z: -0.50, color: PINK,   w: 0.30, h: 0.07 },
+  // Extra neon for AI district feel
+  { x:  0.00, y: 3.20, z:  0.55, color: GOLD,   w: 0.45, h: 0.07 },
+  { x: -1.80, y: 2.40, z:  0.50, color: ORANGE, w: 0.30, h: 0.06 },
+  { x:  1.90, y: 2.90, z:  0.53, color: GREEN,  w: 0.36, h: 0.07 },
+  { x:  3.10, y: 1.80, z: -0.44, color: CYAN,   w: 0.24, h: 0.06 },
+  { x: -3.20, y: 1.60, z:  0.42, color: GOLD,   w: 0.22, h: 0.05 },
 ];
 
 function BuildingNeonAccents() {
@@ -668,6 +676,121 @@ function BuildingNeonAccents() {
         </mesh>
       ))}
     </>
+  );
+}
+
+/* ═══════════════════════════════════════════════
+   Vertical energy beams — light pillars from rooftops
+═══════════════════════════════════════════════ */
+const BEAM_DEFS = [
+  { x:  0.00, z:  0.00, color: '#CAFF00', h: 22, baseY: 5.02, r: 0.06 },
+  { x:  1.90, z: -0.40, color: CYAN,      h: 18, baseY: 4.02, r: 0.05 },
+  { x: -1.80, z:  0.50, color: PURPLE,    h: 14, baseY: 3.42, r: 0.045 },
+  { x:  3.10, z:  0.90, color: PINK,      h: 12, baseY: 2.62, r: 0.04 },
+  { x: -3.20, z: -0.40, color: GREEN,     h: 10, baseY: 2.22, r: 0.035 },
+  { x:  0.60, z: -1.60, color: GOLD,      h:  9, baseY: 2.92, r: 0.035 },
+];
+
+function VerticalBeams() {
+  const pr = useContext(ProgressCtx);
+  const matRefs = useRef<(THREE.MeshBasicMaterial | null)[]>([]);
+
+  useFrame(({ clock }) => {
+    const t = clock.getElapsedTime();
+    matRefs.current.forEach((mat, i) => {
+      if (!mat) return;
+      const d = BEAM_DEFS[i];
+      mat.opacity = (0.04 + pr.current * 0.10) *
+        (0.5 + Math.sin(t * 0.9 + i * 1.3) * 0.4) *
+        (i === 0 ? 1.4 : 1);
+    });
+  });
+
+  return (
+    <>
+      {BEAM_DEFS.map((d, i) => (
+        <mesh key={i} position={[d.x, d.baseY + d.h / 2, d.z]}>
+          <coneGeometry args={[d.r * 6, d.h, 8, 1, true]} />
+          <meshBasicMaterial
+            ref={el => { matRefs.current[i] = el; }}
+            color={d.color} transparent opacity={0.06}
+            side={THREE.DoubleSide} depthWrite={false}
+          />
+        </mesh>
+      ))}
+    </>
+  );
+}
+
+/* ═══════════════════════════════════════════════
+   Holographic crown — floating rotating diamond above main tower
+═══════════════════════════════════════════════ */
+function HoloCrown() {
+  const pr = useContext(ProgressCtx);
+  const topRef    = useRef<THREE.Mesh>(null);
+  const botRef    = useRef<THREE.Mesh>(null);
+  const ringRef1  = useRef<THREE.Mesh>(null);
+  const ringRef2  = useRef<THREE.Mesh>(null);
+  const matRef1   = useRef<THREE.MeshBasicMaterial>(null);
+  const matRef2   = useRef<THREE.MeshBasicMaterial>(null);
+  const ringMat1  = useRef<THREE.MeshBasicMaterial>(null);
+  const ringMat2  = useRef<THREE.MeshBasicMaterial>(null);
+
+  useFrame(({ clock }) => {
+    const t = clock.getElapsedTime();
+    const p = pr.current;
+    const baseY = 6.2 + Math.sin(t * 1.1) * 0.18;
+
+    if (topRef.current) {
+      topRef.current.rotation.y = t * 0.9;
+      topRef.current.position.y = baseY;
+    }
+    if (botRef.current) {
+      botRef.current.rotation.y = -t * 0.9;
+      botRef.current.position.y = baseY;
+    }
+    if (ringRef1.current) {
+      ringRef1.current.rotation.z = t * 0.6;
+      ringRef1.current.position.y = baseY;
+    }
+    if (ringRef2.current) {
+      ringRef2.current.rotation.x = t * 0.5;
+      ringRef2.current.position.y = baseY;
+    }
+
+    const pulse = 0.55 + Math.sin(t * 2.2) * 0.35;
+    const base = 0.15 + p * 0.35;
+    if (matRef1.current)  matRef1.current.opacity  = base * pulse;
+    if (matRef2.current)  matRef2.current.opacity  = base * pulse * 0.7;
+    if (ringMat1.current) ringMat1.current.opacity = base * 0.6;
+    if (ringMat2.current) ringMat2.current.opacity = base * 0.5;
+  });
+
+  return (
+    <group position={[0, 0, 0]}>
+      {/* Upper cone */}
+      <mesh ref={topRef} position={[0, 6.2, 0]}>
+        <coneGeometry args={[0.30, 0.55, 4]} />
+        <meshBasicMaterial ref={matRef1} color="#CAFF00" wireframe transparent opacity={0.4} />
+      </mesh>
+      {/* Lower inverted cone */}
+      <mesh ref={botRef} position={[0, 6.2, 0]} rotation={[Math.PI, 0, 0]}>
+        <coneGeometry args={[0.30, 0.55, 4]} />
+        <meshBasicMaterial ref={matRef2} color={CYAN} wireframe transparent opacity={0.28} />
+      </mesh>
+      {/* Orbit ring 1 */}
+      <mesh ref={ringRef1} position={[0, 6.2, 0]}>
+        <torusGeometry args={[0.45, 0.012, 8, 32]} />
+        <meshBasicMaterial ref={ringMat1} color={PINK} transparent opacity={0.5} depthWrite={false} />
+      </mesh>
+      {/* Orbit ring 2 (tilted) */}
+      <mesh ref={ringRef2} position={[0, 6.2, 0]} rotation={[0, Math.PI / 4, 0]}>
+        <torusGeometry args={[0.55, 0.008, 6, 28]} />
+        <meshBasicMaterial ref={ringMat2} color={GREEN} transparent opacity={0.4} depthWrite={false} />
+      </mesh>
+      {/* Center beacon */}
+      <pointLight position={[0, 6.2, 0]} color="#CAFF00" intensity={2.5} distance={3.5} decay={2} />
+    </group>
   );
 }
 
@@ -1042,6 +1165,8 @@ function CityGroup({ night }: { night: boolean }) {
       <CrosswalkMarkings />
       {BUILDINGS.map((b, i) => <Building key={i} {...b} night={night} />)}
       <BuildingNeonAccents />
+      <VerticalBeams />
+      <HoloCrown />
       <RooftopTechUnits />
       <NeuralBrainOrb />
       {HERO_CARS.map((c, i) => <MiniAIVehicle key={`hc-${i}`} {...c} />)}
