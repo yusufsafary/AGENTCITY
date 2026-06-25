@@ -1,4 +1,4 @@
-import { GitFork, Building2, Users } from 'lucide-react';
+import { GitFork, Building2, Users, Camera } from 'lucide-react';
 
 interface FloatingControlsProps {
   showForks: boolean;
@@ -7,6 +7,8 @@ interface FloatingControlsProps {
   onToggleSkyline: () => void;
   showNeighbors: boolean;
   onToggleNeighbors: () => void;
+  onDownload?: () => void;
+  downloading?: boolean;
 }
 
 interface IconBtnProps {
@@ -15,9 +17,10 @@ interface IconBtnProps {
   icon: React.ReactNode;
   label: string;
   activeColor: string;
+  pulse?: boolean;
 }
 
-function IconBtn({ onClick, active, icon, label, activeColor }: IconBtnProps) {
+function IconBtn({ onClick, active, icon, label, activeColor, pulse }: IconBtnProps) {
   return (
     <button
       onClick={onClick}
@@ -29,10 +32,17 @@ function IconBtn({ onClick, active, icon, label, activeColor }: IconBtnProps) {
         border: 'none', cursor: 'pointer', transition: 'all 0.18s ease',
         color: active ? '#ffffff' : 'rgba(255,255,255,0.55)',
         flexShrink: 0,
+        animation: pulse ? 'fc-pulse 1s ease-in-out infinite' : undefined,
       }}
       aria-label={label}
     >
       {icon}
+      <style>{`
+        @keyframes fc-pulse {
+          0%,100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.6; transform: scale(0.9); }
+        }
+      `}</style>
     </button>
   );
 }
@@ -50,6 +60,7 @@ export default function FloatingControls({
   showForks, onToggleForks,
   showSkyline, onToggleSkyline,
   showNeighbors, onToggleNeighbors,
+  onDownload, downloading,
 }: FloatingControlsProps) {
   return (
     <div style={{
@@ -86,6 +97,19 @@ export default function FloatingControls({
         label={showSkyline ? 'Hide Skyline' : 'Show Skyline'}
         activeColor="rgba(202,255,0,0.20)"
       />
+      {onDownload && (
+        <>
+          <Divider />
+          <IconBtn
+            active={false}
+            onClick={onDownload}
+            icon={<Camera size={15} />}
+            label="Download city as image"
+            activeColor="rgba(0,212,255,0.25)"
+            pulse={downloading}
+          />
+        </>
+      )}
     </div>
   );
 }
