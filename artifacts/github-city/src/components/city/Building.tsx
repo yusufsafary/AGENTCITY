@@ -458,7 +458,7 @@ function ClickIndicator({ yTop, hovered, animProgress, nightMode }: {
   });
 
   if (animProgress < 0.80) return null;
-  const color = nightMode ? NIGHT_PALETTE.turquoise : '#4ABFB0';
+  const color = '#CAFF00';
   return (
     <group>
       <mesh ref={ringRef} position={[0, yTop + 0.58, 0]} rotation={[Math.PI / 2, 0, 0]}>
@@ -484,7 +484,7 @@ function RepoTooltip({ h, data }: { h: number; data: BuildingData }) {
     <Html position={[0, h + 1.3, 0]} center distanceFactor={14} zIndexRange={[100, 0]}>
       <div style={{
         background: 'rgba(12,5,2,0.95)',
-        border: '1px solid rgba(74,191,176,0.55)',
+        border: '1px solid rgba(202,255,0,0.55)',
         borderRadius: 9,
         padding: '5px 12px',
         color: 'white',
