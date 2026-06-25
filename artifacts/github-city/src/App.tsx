@@ -178,6 +178,77 @@ export default function App() {
   );
 }
 
+/* ── Matrix Rain canvas ── */
+const MATRIX_CHARS = '01アイウエオカキクケコサシスセソタチツテト∑⊕◊∇⟨⟩∫≈≠ABCDEF0123456789';
+
+function MatrixRain() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const resize = () => {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    resize();
+    window.addEventListener('resize', resize);
+
+    const fontSize = 11;
+    const cols = Math.floor(canvas.width / fontSize);
+    const drops = Array.from({ length: cols }, () => Math.random() * -100);
+    const PALETTE = ['#CAFF00', '#00D4FF', '#FF0090', '#00FF94', '#FFB700'];
+
+    let frame = 0;
+    let animId: number;
+
+    const draw = () => {
+      frame++;
+      if (frame % 3 !== 0) { animId = requestAnimationFrame(draw); return; }
+
+      ctx.fillStyle = 'rgba(4, 8, 20, 0.10)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.font = `${fontSize}px monospace`;
+
+      drops.forEach((y, i) => {
+        const char = MATRIX_CHARS[Math.floor(Math.random() * MATRIX_CHARS.length)];
+        const color = PALETTE[i % PALETTE.length];
+        // Leading char brighter
+        ctx.fillStyle = '#FFFFFF';
+        ctx.globalAlpha = 0.9;
+        ctx.fillText(char, i * fontSize, y * fontSize);
+        // Trail chars
+        ctx.fillStyle = color;
+        ctx.globalAlpha = 0.22;
+        ctx.fillText(char, i * fontSize, (y - 1) * fontSize);
+        ctx.globalAlpha = 1;
+
+        if (y * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i] += 0.5;
+      });
+
+      animId = requestAnimationFrame(draw);
+    };
+    animId = requestAnimationFrame(draw);
+    return () => {
+      cancelAnimationFrame(animId);
+      window.removeEventListener('resize', resize);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 pointer-events-none"
+      style={{ zIndex: 0, opacity: 0.55, mixBlendMode: 'screen' }}
+    />
+  );
+}
+
 /* ── Neural network decorative SVG overlay ── */
 function NeuralOverlay() {
   const nodes = [
@@ -284,6 +355,9 @@ function LandingHero({ onShowLeaderboard }: { onShowLeaderboard: () => void }) {
 
   return (
     <div className="absolute inset-0 gc-scanlines" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
+      {/* Matrix rain background — full screen canvas */}
+      <MatrixRain />
+
       <Suspense fallback={<div className="absolute inset-0" style={{ background: '#060D1F' }} />}>
         <HeroCity3D />
       </Suspense>
