@@ -118,12 +118,12 @@ export function AboutModal({ onClose }: { onClose: () => void }) {
         <div className="min-w-0">
           <p className="text-white/40 text-xs">Built by</p>
           <a
-            href="https://x.com/jamesblock_"
+            href="https://x.com/jackie_doll96"
             target="_blank"
             rel="noopener noreferrer"
             className="text-[#4ABFB0] font-semibold text-sm hover:text-[#6DD4C8] transition-colors"
           >
-            @jamesblock_
+            @jackie_doll96
           </a>
         </div>
       </div>
